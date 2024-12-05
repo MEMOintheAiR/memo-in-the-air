@@ -12,7 +12,7 @@ function arScene() {
 export default function ar() {
   return (
     <>
-      <SafeAreaView />
+      <SafeAreaView style={styles.headerContainer} />
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{ scene: arScene }}
@@ -24,7 +24,7 @@ export default function ar() {
           <Text style={styles.iconText}>{MAIN_PAGE}</Text>
         </View>
         <View style={styles.plusIconContainer}>
-          <PlusSvg width="80%" height="80%" color="#6CA0DC" />
+          <PlusSvg width="65%" height="65%" color="#6CA0DC" />
         </View>
         <View style={styles.iconContainer}>
           <MemoListSvg width="30%" height="30%" color="#343a40" />
@@ -36,27 +36,29 @@ export default function ar() {
 }
 
 const styles = StyleSheet.create({
+  headerContainer: {
+    flex: 0.1,
+  },
   arContainer: {
     flex: 1,
   },
   bottomContainer: {
-    flex: 0.2,
+    flex: 0.15,
     flexDirection: "row",
   },
   iconContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
+    marginTop: 10,
   },
   iconText: {
-    fontSize: 20,
-    marginTop: 10,
+    fontSize: 15,
+    marginTop: 8,
     color: "#343a40",
   },
   plusIconContainer: {
     flex: 1,
     alignItems: "center",
-    justifyContent: "center",
-    paddingBottom: 20,
+    marginTop: 3,
   },
 });
