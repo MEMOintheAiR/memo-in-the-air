@@ -1,0 +1,59 @@
+{
+  "expo": {
+    "name": "MEMOintheAir",
+    "slug": "MEMOintheAir",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/favicon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "ios": {
+      "supportsTablet": true,
+      "infoPlist": {
+        "NSPhotoLibraryUsageDescription": "Allow MEMO in the AiR to access your photos",
+        "NSPhotoLibraryAddUsageDescription": "Allow MEMO in the AiR to save photos",
+        "NSCameraUsageDescription": "Allow MEMO in the AiR to use your camera",
+        "NSMicrophoneUsageDescription": "Allow MEMO in the AiR to use your microphone"
+      },
+      "bundleIdentifier": "com.anonymous.MEMOintheAiR"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/favicon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/logo.png",
+          "imageWidth": 200,
+          "resizeMode": "contain",
+          "backgroundColor": "#ffffff"
+        }
+      ],
+      [
+        "@reactvision/react-viro",
+        {
+          "ios": {
+            "cameraUsagePermission": "MEMO in the AiR uses your camera for AR experiences. This is a custom InfoPlist string!",
+            "microphoneUsagePermission": "MEMO in the AiR uses your microphone for AR experiences. This is a custom InfoPlist string!",
+            "photosPermission": "MEMO in the AiR would like to read photos for AR experiences. This is a custom InfoPlist string!",
+            "savephotosPermission": "MEMO in the AiR would like to save photos to your library during AR experiences. This is a custom InfoPlist string!"
+          }
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}
