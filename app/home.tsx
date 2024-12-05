@@ -1,8 +1,13 @@
 import Button from "@/components/Button";
 import { LOGIN_BUTTON, START_BUTTON } from "@/constants/Buttons";
+import { router } from "expo-router";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function home() {
+  function handleARScreen() {
+    router.push("/ar");
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
@@ -14,7 +19,12 @@ export default function home() {
       </View>
       <View style={styles.buttonContainer}>
         <Button buttonText={LOGIN_BUTTON} style={styles.login} textStyle={styles.loginText} />
-        <Button buttonText={START_BUTTON} style={styles.start} textStyle={styles.startText} />
+        <Button
+          buttonText={START_BUTTON}
+          style={styles.start}
+          textStyle={styles.startText}
+          onPressFunc={handleARScreen}
+        />
       </View>
     </SafeAreaView>
   );

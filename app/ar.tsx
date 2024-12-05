@@ -3,13 +3,19 @@ import MemoListSvg from "../assets/images/memoList.svg";
 import PlusSvg from "../assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { ViroARScene, ViroARSceneNavigator } from "@reactvision/react-viro";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { router } from "expo-router";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import "react-native-reanimated";
 
 function arScene() {
   return <ViroARScene />;
 }
 
 export default function ar() {
+  function handleHome() {
+    router.navigate("/");
+  }
+
   return (
     <>
       <SafeAreaView style={styles.headerContainer} />
@@ -19,10 +25,10 @@ export default function ar() {
         style={styles.arContainer}
       />
       <View style={styles.bottomContainer}>
-        <View style={styles.iconContainer}>
+        <Pressable style={styles.iconContainer} onPress={handleHome}>
           <HomeSvg width="30%" height="30%" color="#343a40" />
           <Text style={styles.iconText}>{MAIN_PAGE}</Text>
-        </View>
+        </Pressable>
         <View style={styles.plusIconContainer}>
           <PlusSvg width="65%" height="65%" color="#6CA0DC" />
         </View>
