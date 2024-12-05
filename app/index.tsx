@@ -1,34 +1,5 @@
-import { ViroARScene, ViroARSceneNavigator } from "@reactvision/react-viro";
-import { View } from "react-native";
+import Home from "./home";
 
-function vrInit() {
-  return <ViroARScene />;
-}
-
-export default function Index() {
-  return (
-    <>
-      <View
-        style={{
-          flex: 0.2,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      />
-      <ViroARSceneNavigator
-        autofocus={true}
-        initialScene={{
-          scene: vrInit,
-        }}
-        style={{ flex: 1 }}
-      />
-      <View
-        style={{
-          flex: 0.2,
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      />
-    </>
-  );
+export default function index() {
+  return <Home />;
 }

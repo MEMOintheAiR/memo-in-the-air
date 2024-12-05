@@ -1,0 +1,79 @@
+import Button from "@/components/Button";
+import { Buttons } from "@/constants/Buttons";
+import { Image, SafeAreaView, StyleSheet, View } from "react-native";
+
+export default function home() {
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.imageContainer}>
+        <Image
+          source={require("../assets/images/logo.png")}
+          style={styles.image}
+          resizeMode="contain"
+        />
+      </View>
+      <View style={styles.buttonContainer}>
+        <Button buttonText={Buttons.login} style={styles.login} textStyle={styles.loginText} />
+        <Button buttonText={Buttons.start} style={styles.start} textStyle={styles.startText} />
+      </View>
+    </SafeAreaView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  imageContainer: {
+    flex: 6,
+  },
+  image: {
+    flex: 1,
+    transform: [{ scale: 0.9 }],
+    alignItems: "center",
+    justifyContent: "flex-end",
+  },
+  buttonContainer: {
+    flex: 2,
+    width: "100%",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  login: {
+    width: "60%",
+    height: 50,
+    backgroundColor: "#6CA0DC",
+    borderColor: "#6CA0DC",
+    borderWidth: 2,
+    borderRadius: 20,
+    marginBottom: 10,
+  },
+  loginText: {
+    flex: 1,
+    fontSize: 24,
+    color: "#FFFFFF",
+    textAlign: "center",
+    fontWeight: 700,
+    paddingVertical: 10,
+  },
+  start: {
+    width: "60%",
+    height: 50,
+    backgroundColor: "#FFFFFF",
+    borderColor: "#6CA0DC",
+    borderWidth: 2,
+    borderRadius: 20,
+  },
+  startText: {
+    flex: 1,
+    fontSize: 23,
+    color: "#6CA0DC",
+    textAlign: "center",
+    fontWeight: 700,
+    paddingVertical: 10,
+  },
+});
