@@ -1,5 +1,5 @@
 import Button from "@/components/Button";
-import { Buttons } from "@/constants/Buttons";
+import { LOGIN_BUTTON, START_BUTTON } from "@/constants/Buttons";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function home() {
@@ -13,8 +13,8 @@ export default function home() {
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button buttonText={Buttons.login} style={styles.login} textStyle={styles.loginText} />
-        <Button buttonText={Buttons.start} style={styles.start} textStyle={styles.startText} />
+        <Button buttonText={LOGIN_BUTTON} style={styles.login} textStyle={styles.loginText} />
+        <Button buttonText={START_BUTTON} style={styles.start} textStyle={styles.startText} />
       </View>
     </SafeAreaView>
   );
