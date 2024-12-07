@@ -5,11 +5,11 @@ import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { ViroARScene, ViroARSceneNavigator } from "@reactvision/react-viro";
 import { router } from "expo-router";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
-import "react-native-reanimated";
 
-function arScene() {
-  return <ViroARScene />;
-}
+export default function ar() {
+  function arScene() {
+    return <ViroARScene />;
+  }
 
 export default function ar() {
   function handleHome() {
@@ -19,11 +19,14 @@ export default function ar() {
   return (
     <>
       <SafeAreaView style={styles.headerContainer} />
+
       <ViroARSceneNavigator
         autofocus={true}
         initialScene={{ scene: arScene }}
         style={styles.arContainer}
+        worldAlignment="Camera"
       />
+
       <View style={styles.bottomContainer}>
         <Pressable style={styles.iconContainer} onPress={handleHome}>
           <HomeSvg width="30%" height="30%" color="#343a40" />
@@ -60,7 +63,7 @@ const styles = StyleSheet.create({
   iconText: {
     fontSize: 15,
     marginTop: 8,
-    color: "#343a40",
+    color: "#343A40",
   },
   plusIconContainer: {
     flex: 1,
