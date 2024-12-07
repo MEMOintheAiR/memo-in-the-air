@@ -4,7 +4,7 @@ import { router } from "expo-router";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function home() {
-  function handleARScreen() {
+  function handleMoveToAR() {
     router.push("/ar");
   }
 
@@ -23,7 +23,7 @@ export default function home() {
           buttonText={START_BUTTON}
           style={styles.start}
           textStyle={styles.startText}
-          onPressFunc={handleARScreen}
+          onPressFunc={handleMoveToAR}
         />
       </View>
     </SafeAreaView>
