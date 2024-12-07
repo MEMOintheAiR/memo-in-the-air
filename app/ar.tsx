@@ -11,9 +11,14 @@ export default function ar() {
     return <ViroARScene />;
   }
 
-export default function ar() {
-  function handleHome() {
-    router.navigate("/");
+  function handleMoveToHome() {
+    router.dismiss();
+    router.push("/home");
+  }
+
+  function handleMoveToARGrid() {
+    router.dismiss();
+    router.push("/loading");
   }
 
   return (
@@ -28,13 +33,13 @@ export default function ar() {
       />
 
       <View style={styles.bottomContainer}>
-        <Pressable style={styles.iconContainer} onPress={handleHome}>
+        <Pressable style={styles.iconContainer} onPress={handleMoveToHome}>
           <HomeSvg width="30%" height="30%" color="#343a40" />
           <Text style={styles.iconText}>{MAIN_PAGE}</Text>
         </Pressable>
-        <View style={styles.plusIconContainer}>
+        <Pressable style={styles.plusIconContainer} onPress={handleMoveToARGrid}>
           <PlusSvg width="65%" height="65%" color="#6CA0DC" />
-        </View>
+        </Pressable>
         <View style={styles.iconContainer}>
           <MemoListSvg width="30%" height="30%" color="#343a40" />
           <Text style={styles.iconText}>{MEMO_LIST_PAGE}</Text>

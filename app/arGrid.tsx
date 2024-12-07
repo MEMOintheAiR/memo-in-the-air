@@ -17,7 +17,7 @@ export default function arGrid() {
 
   function handleMoveToHome() {
     router.dismiss();
-    router.replace("/home");
+    router.push("/loading");
   }
 
   return (
