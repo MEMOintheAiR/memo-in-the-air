@@ -3,12 +3,32 @@ import "react-native-reanimated";
 
 export default function RootLayout() {
   return (
-    <Stack screenOptions={{ headerShown: false }}>
-      <Stack.Screen name="index" />
-      <Stack.Screen name="home" />
-      <Stack.Screen name="loading" />
-      <Stack.Screen name="ar" />
-      <Stack.Screen name="arGrid" />
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="home" options={{ headerShown: false }} />
+      <Stack.Screen name="loading" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="ar"
+        options={{
+          title: "",
+          headerStyle: { backgroundColor: "#FFFFFF" },
+          headerBackVisible: false,
+        }}
+      />
+      <Stack.Screen
+        name="arGrid"
+        options={{
+          title: "메모 등록",
+          headerStyle: {
+            backgroundColor: "#FFFFFF",
+          },
+          headerTintColor: "#343A40",
+          headerTitleStyle: {
+            fontSize: 20,
+          },
+          headerBackVisible: false,
+        }}
+      />
     </Stack>
   );
 }
