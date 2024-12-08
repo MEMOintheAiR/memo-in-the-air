@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "memointheair.app"
-               BlueprintName = "memointheair"
-               ReferencedContainer = "container:memointheair.xcodeproj">
+               BuildableName = "MEMOintheAir.app"
+               BlueprintName = "MEMOintheAir"
+               ReferencedContainer = "container:MEMOintheAir.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "memointheairTests.xctest"
-               BlueprintName = "memointheairTests"
-               ReferencedContainer = "container:memointheair.xcodeproj">
+               BuildableName = "MEMOintheAirTests.xctest"
+               BlueprintName = "MEMOintheAirTests"
+               ReferencedContainer = "container:MEMOintheAir.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "memointheair.app"
-            BlueprintName = "memointheair"
-            ReferencedContainer = "container:memointheair.xcodeproj">
+            BuildableName = "MEMOintheAir.app"
+            BlueprintName = "MEMOintheAir"
+            ReferencedContainer = "container:MEMOintheAir.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "memointheair.app"
-            BlueprintName = "memointheair"
-            ReferencedContainer = "container:memointheair.xcodeproj">
+            BuildableName = "MEMOintheAir.app"
+            BlueprintName = "MEMOintheAir"
+            ReferencedContainer = "container:MEMOintheAir.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
