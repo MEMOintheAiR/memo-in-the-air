@@ -29,6 +29,20 @@ export default function RootLayout() {
           headerBackVisible: false,
         }}
       />
+      <Stack.Screen
+        name="memoEdit"
+        options={{
+          title: "메모 등록",
+          headerStyle: {
+            backgroundColor: "#FFFFFF",
+          },
+          headerTitleStyle: {
+            fontSize: 20,
+            color: "#343A40",
+          },
+          headerBackVisible: false,
+        }}
+      />
     </Stack>
   );
 }
