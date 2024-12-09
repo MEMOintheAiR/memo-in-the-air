@@ -50,7 +50,8 @@
             "savephotosPermission": "MEMO in the AiR would like to save photos to your library during AR experiences. This is a custom InfoPlist string!"
           }
         }
-      ]
+      ],
+      "expo-secure-store"
     ],
     "experiments": {
       "typedRoutes": true
