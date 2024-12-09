@@ -1,18 +1,19 @@
-import { Image, StyleSheet, Text, View } from "react-native";
+import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 
 type EditStyleButtonProps = {
   text: string;
   imageName: number;
+  onPressFunc: () => void;
 };
 
-export default function EditStyleButton({ text, imageName }: EditStyleButtonProps) {
+export default function EditStyleButton({ text, imageName, onPressFunc }: EditStyleButtonProps) {
   return (
-    <View style={styles.container}>
+    <Pressable style={styles.container} onPress={onPressFunc}>
       <Text style={styles.text}>{text}</Text>
       <View style={styles.imageContainer}>
         <Image source={imageName} style={styles.image} resizeMode="contain" />
       </View>
-    </View>
+    </Pressable>
   );
 }
 
