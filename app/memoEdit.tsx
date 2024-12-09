@@ -4,6 +4,9 @@ import { DONE_BUTTON, SUBMIT_BUTTON } from "@/constants/Buttons";
 import { COLOR, RESIZE, SHAPE, TEXT } from "@/constants/EditStyle";
 import { INPUT_TEXT } from "@/constants/Messages";
 import { CREATE_MEMO_PAGE, INPUT_TEXT_TAB } from "@/constants/Pages";
+import { createMemo } from "@/firebase/memo";
+import { useBoundStore } from "@/slices";
+import { createUUID } from "@/utils/uuid";
 import { useState } from "react";
 import {
   Keyboard,
@@ -18,19 +21,30 @@ import {
 } from "react-native";
 
 export default function MemoEdit() {
-  const [isEditable, setIsEditable] = useState<boolean>(false);
+  const userId = useBoundStore((state) => state.userId);
+
   const [title, setTitle] = useState<string>(CREATE_MEMO_PAGE);
   const [content, setContent] = useState<string>("");
-  const [placeHolder, setPlaceHolder] = useState<string>("");
   const [buttonText, setButtonText] = useState<string>(SUBMIT_BUTTON);
+  const [placeHolder, setPlaceHolder] = useState<string>("");
+  const [isEditable, setIsEditable] = useState<boolean>(false);
 
-  function handleClickHeaderButton(): void {
-    if (buttonText === DONE_BUTTON) {
-      setIsEditable(false);
-      setTitle(CREATE_MEMO_PAGE);
-      setPlaceHolder("");
-      setButtonText(SUBMIT_BUTTON);
-      Keyboard.dismiss();
+  async function handleClickHeaderButton(): Promise<undefined> {
+    switch (buttonText) {
+      case DONE_BUTTON: {
+        setIsEditable(false);
+        setTitle(CREATE_MEMO_PAGE);
+        setPlaceHolder("");
+        setButtonText(SUBMIT_BUTTON);
+        Keyboard.dismiss();
+        return;
+      }
+
+      case SUBMIT_BUTTON: {
+        const memoId = createUUID();
+        await createMemo(userId, memoId, content);
+        return;
+      }
     }
   }
 
