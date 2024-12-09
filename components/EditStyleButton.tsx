@@ -3,7 +3,7 @@ import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 type EditStyleButtonProps = {
   text: string;
   imageName: number;
-  onPressFunc: () => void;
+  onPressFunc?: () => void;
 };
 
 export default function EditStyleButton({ text, imageName, onPressFunc }: EditStyleButtonProps) {
