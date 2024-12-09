@@ -1,6 +1,6 @@
-import HomeSvg from "../assets/images/home.svg";
-import MemoListSvg from "../assets/images/memoList.svg";
-import PlusSvg from "../assets/images/plus.svg";
+import HomeSvg from "@/assets/images/home.svg";
+import MemoListSvg from "@/assets/images/memoList.svg";
+import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { ViroARScene, ViroARSceneNavigator } from "@reactvision/react-viro";
 import { router } from "expo-router";
