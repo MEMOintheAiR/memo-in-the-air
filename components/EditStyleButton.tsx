@@ -37,5 +37,6 @@ const styles = StyleSheet.create({
   image: {
     width: 35,
     height: 35,
+    margin: "auto",
   },
 });
