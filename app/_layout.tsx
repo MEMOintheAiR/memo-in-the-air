@@ -1,3 +1,4 @@
+import { CREATE_MEMO_PAGE } from "@/constants/Pages";
 import { Stack } from "expo-router";
 import "react-native-reanimated";
 
@@ -18,7 +19,7 @@ export default function RootLayout() {
       <Stack.Screen
         name="arGrid"
         options={{
-          title: "메모 등록",
+          title: CREATE_MEMO_PAGE,
           headerStyle: {
             backgroundColor: "#FFFFFF",
           },
@@ -29,20 +30,7 @@ export default function RootLayout() {
           headerBackVisible: false,
         }}
       />
-      <Stack.Screen
-        name="memoEdit"
-        options={{
-          title: "메모 등록",
-          headerStyle: {
-            backgroundColor: "#FFFFFF",
-          },
-          headerTitleStyle: {
-            fontSize: 20,
-            color: "#343A40",
-          },
-          headerBackVisible: false,
-        }}
-      />
+      <Stack.Screen name="memoEdit" options={{ headerShown: false }} />
     </Stack>
   );
 }
