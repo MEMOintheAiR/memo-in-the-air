@@ -1,5 +1,5 @@
 import Home from "./home";
-import { useBoundStore } from "@/slices";
+import { useBoundStore } from "@/store/useBoundStore";
 import { checkUserId } from "@/utils/uuid";
 import { useEffect } from "react";
 

@@ -1,4 +1,4 @@
-import { UserSlice, createUserSlice } from "./useUserStore";
+import { UserSlice, createUserSlice } from "./userSlice";
 import { create } from "zustand";
 
 const useBoundStore = create<UserSlice>()((...a) => ({

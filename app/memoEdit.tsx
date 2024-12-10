@@ -5,7 +5,7 @@ import { COLOR, RESIZE, SHAPE, TEXT } from "@/constants/EditStyle";
 import { INPUT_TEXT } from "@/constants/Messages";
 import { CREATE_MEMO_PAGE, INPUT_TEXT_TAB } from "@/constants/Pages";
 import { createMemo } from "@/firebase/memo";
-import { useBoundStore } from "@/slices";
+import { useBoundStore } from "@/store/useBoundStore";
 import { createUUID } from "@/utils/uuid";
 import { useState } from "react";
 import {
