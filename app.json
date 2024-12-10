@@ -51,7 +51,13 @@
           }
         }
       ],
-      "expo-secure-store"
+      "expo-secure-store",
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Allow MEMO in the AiR to use your location."
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true
