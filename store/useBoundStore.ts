@@ -1,8 +1,10 @@
+import { MemoSlice, createMemoSlice } from "./memoSlice";
 import { UserSlice, createUserSlice } from "./userSlice";
 import { create } from "zustand";
 
-const useBoundStore = create<UserSlice>()((...a) => ({
+const useBoundStore = create<UserSlice & MemoSlice>()((...a) => ({
   ...createUserSlice(...a),
+  ...createMemoSlice(...a),
 }));
 
 export { useBoundStore };
