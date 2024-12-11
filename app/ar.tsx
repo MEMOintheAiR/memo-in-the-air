@@ -2,11 +2,16 @@ import HomeSvg from "@/assets/images/home.svg";
 import MemoListSvg from "@/assets/images/memoList.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
+import { useBoundStore } from "@/store/useBoundStore";
 import { ViroARScene, ViroARSceneNavigator } from "@reactvision/react-viro";
+import * as Location from "expo-location";
 import { router } from "expo-router";
+import { useEffect } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
-export default function ar() {
+export default function AR() {
+  const setUserLocation = useBoundStore((state) => state.setUserLocation);
+
   function arScene() {
     return <ViroARScene />;
   }
@@ -20,6 +25,22 @@ export default function ar() {
     router.dismiss();
     router.push("/loading");
   }
+
+  async function getUserLocation() {
+    const { coords } = await Location.getCurrentPositionAsync();
+
+    if (coords) {
+      setUserLocation({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        altitude: coords.altitude,
+      });
+    }
+  }
+
+  useEffect(() => {
+    getUserLocation();
+  }, []);
 
   return (
     <>
