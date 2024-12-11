@@ -22,6 +22,7 @@ import {
 
 export default function MemoEdit() {
   const userId = useBoundStore((state) => state.userId);
+  const memoLocation = useBoundStore((state) => state.memoLocation);
 
   const [title, setTitle] = useState<string>(CREATE_MEMO_PAGE);
   const [content, setContent] = useState<string>("");
@@ -42,7 +43,7 @@ export default function MemoEdit() {
 
       case SUBMIT_BUTTON: {
         const memoId = createUUID();
-        await createMemo(userId, memoId, content);
+        await createMemo({ userId, memoId, content, ...memoLocation });
         return;
       }
     }
