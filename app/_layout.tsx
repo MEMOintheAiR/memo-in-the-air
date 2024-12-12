@@ -31,6 +31,14 @@ export default function RootLayout() {
         }}
       />
       <Stack.Screen name="memoEdit" options={{ headerShown: false }} />
+      <Stack.Screen
+        name="arWebview"
+        options={{
+          title: "",
+          headerStyle: { backgroundColor: "#FFFFFF" },
+          headerBackVisible: false,
+        }}
+      />
       <Stack.Screen name="+not-found" options={{ headerShown: false }} />
       <Stack.Screen name="locationPermission" options={{ headerShown: false }} />
     </Stack>

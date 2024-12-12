@@ -5,7 +5,7 @@ import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function home() {
   function handleMoveToAR() {
-    router.push("/ar");
+    router.push("/arWebview");
   }
 
   return (
