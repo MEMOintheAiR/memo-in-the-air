@@ -2,15 +2,19 @@ import HomeSvg from "@/assets/images/home.svg";
 import MemoListSvg from "@/assets/images/memoList.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
+import { getUserMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { ViroARScene, ViroARSceneNavigator } from "@reactvision/react-viro";
 import * as Location from "expo-location";
 import { router } from "expo-router";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 export default function AR() {
+  const userId = useBoundStore((state) => state.userId);
   const setUserLocation = useBoundStore((state) => state.setUserLocation);
+
+  const [memoList, setMemoList] = useState<Array<object[]>>([]);
 
   function arScene() {
     return <ViroARScene />;
@@ -38,8 +42,14 @@ export default function AR() {
     }
   }
 
+  async function getUserMemoListFB(userId: string) {
+    const memoList = await getUserMemoList(userId);
+    setMemoList(memoList);
+  }
+
   useEffect(() => {
     getUserLocation();
+    getUserMemoListFB(userId);
   }, []);
 
   return (

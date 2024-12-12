@@ -1,5 +1,5 @@
 import { database } from "@/firebaseConfig";
-import { Database, ref, set } from "firebase/database";
+import { Database, get, ref, set } from "firebase/database";
 
 export async function createMemo({
   userId,
@@ -24,4 +24,9 @@ export async function createMemo({
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
+}
+
+export async function getUserMemoList(userId: string) {
+  const snapshot = await get(ref(database, `memo/${userId}`));
+  return snapshot.val();
 }
