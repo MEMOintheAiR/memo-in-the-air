@@ -55,13 +55,19 @@ export default function ARWebView() {
           <HomeSvg width="30%" height="30%" color="#343A40" />
           <Text style={styles.iconText}>{MAIN_PAGE}</Text>
         </Pressable>
-        <Pressable style={styles.plusIconContainer} onPress={handleClickPlusButton}>
-          <PlusSvg width="65%" height="65%" color="#6CA0DC" />
-        </Pressable>
-        <View style={styles.iconContainer}>
+
+        {isGridVisible ? (
+          <View style={styles.plusIconContainer}></View>
+        ) : (
+          <Pressable style={styles.plusIconContainer} onPress={handleClickPlusButton}>
+            <PlusSvg width="65%" height="65%" color="#6CA0DC" />
+          </Pressable>
+        )}
+
+        <Pressable style={styles.iconContainer}>
           <MemoListSvg width="30%" height="30%" color="#343A40" />
           <Text style={styles.iconText}>{MEMO_LIST_PAGE}</Text>
-        </View>
+        </Pressable>
       </View>
     </>
   );
