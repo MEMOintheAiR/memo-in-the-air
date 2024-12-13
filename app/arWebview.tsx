@@ -19,15 +19,21 @@ export default function ARWebView() {
     if (!isGridVisible) {
       setIsGridVisible(true);
       webViewRef.current?.injectJavaScript(`
+        const aEntity = document.createElement("a-entity");
+        aEntity.setAttribute("id", "arCamera");
+        aEntity.setAttribute("camera", "");
+
         const aPlane = document.createElement("a-plane");
-        aPlane.setAttribute("position", "0 1.7 -5");
+        aPlane.setAttribute("position", "0 0 -3");
         aPlane.setAttribute("rotation", "0 0 0");
         aPlane.setAttribute("width", "1.5");
         aPlane.setAttribute("height", "1.5");
         aPlane.setAttribute("material", "color: #FFFF4C; opacity: 0.7;");
         aPlane.setAttribute("id", "memoGrid");
 
-        document.getElementById("aScene")?.appendChild(aPlane);
+        document.getElementById("aScene")?.appendChild(aEntity);
+        document.getElementById("arCamera")?.appendChild(aPlane);
+
         true;
       `);
     }
