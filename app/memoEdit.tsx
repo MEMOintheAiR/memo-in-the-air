@@ -7,10 +7,12 @@ import { CREATE_MEMO_PAGE, INPUT_TEXT_TAB } from "@/constants/Pages";
 import { createMemo } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { createUUID } from "@/utils/uuid";
+import { router } from "expo-router";
 import { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
+  Modal,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -29,6 +31,7 @@ export default function MemoEdit() {
   const [buttonText, setButtonText] = useState<string>(SUBMIT_BUTTON);
   const [placeHolder, setPlaceHolder] = useState<string>("");
   const [isEditable, setIsEditable] = useState<boolean>(false);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
   async function handleClickHeaderButton(): Promise<undefined> {
     switch (buttonText) {
@@ -37,6 +40,7 @@ export default function MemoEdit() {
         setTitle(CREATE_MEMO_PAGE);
         setPlaceHolder("");
         setButtonText(SUBMIT_BUTTON);
+
         Keyboard.dismiss();
         return;
       }
@@ -44,7 +48,7 @@ export default function MemoEdit() {
       case SUBMIT_BUTTON: {
         const memoId = createUUID();
         await createMemo({ userId, memoId, content, ...memoLocation });
-        return;
+        setIsModalVisible(true);
       }
     }
   }
@@ -56,8 +60,25 @@ export default function MemoEdit() {
     setButtonText(DONE_BUTTON);
   }
 
+  function handleMoveToAR(): void {
+    setIsModalVisible(false);
+    router.dismissAll();
+    router.push("/arWebview");
+  }
+
   return (
     <View style={styles.container}>
+      <Modal visible={isModalVisible} transparent={true} animationType="none">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalTextContainer}>
+            <Text style={styles.modalText}>메모가 등록되었습니다.</Text>
+          </View>
+          <Pressable style={styles.modalButtonContainer} onPress={handleMoveToAR}>
+            <Text style={styles.modalButtonText}>등록한 메모 보러가기</Text>
+          </Pressable>
+        </View>
+      </Modal>
+
       <SafeAreaView style={styles.headerContainer}>
         <Pressable style={styles.headerButton}>
           <PreviousIcon width="20" height="20" color="#343A40" />
@@ -155,5 +176,34 @@ const styles = StyleSheet.create({
     alignItems: "flex-start",
     paddingTop: 25,
     backgroundColor: "#FFFFFF",
+  },
+  modalContainer: {
+    width: "75%",
+    height: "20%",
+    margin: "auto",
+    backgroundColor: "white",
+    borderRadius: 10,
+  },
+  modalTextContainer: {
+    flex: 5,
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  modalText: {
+    fontSize: 25,
+    color: "#343A40",
+  },
+  modalButtonContainer: {
+    flex: 2,
+    width: "100%",
+    borderTopWidth: 0.5,
+    borderTopColor: "#343A40",
+  },
+  modalButtonText: {
+    color: "#6CA0DC",
+    fontSize: 22,
+    textAlign: "center",
+    margin: "auto",
   },
 });
