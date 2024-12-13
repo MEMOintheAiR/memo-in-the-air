@@ -5,11 +5,19 @@ import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { router } from "expo-router";
 import { useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
-import { WebView } from "react-native-webview";
+import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
   const webViewRef = useRef<WebView>(null);
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
+
+  function handleWebViewMessage(event: WebViewMessageEvent) {
+    const type: string = event.nativeEvent.data;
+
+    if (type === "grid-click") {
+      router.push("/memoEdit");
+    }
+  }
 
   function handleMoveToHome() {
     router.back();
@@ -34,6 +42,10 @@ export default function ARWebView() {
         document.getElementById("aScene")?.appendChild(aEntity);
         document.getElementById("arCamera")?.appendChild(aPlane);
 
+        document.getElementById("aScene").addEventListener("click", function () {
+          window.ReactNativeWebView.postMessage("grid-click");
+        });
+
         true;
       `);
     }
@@ -47,6 +59,7 @@ export default function ARWebView() {
         javaScriptEnabled={true}
         mediaPlaybackRequiresUserAction={false}
         allowsInlineMediaPlayback={true}
+        onMessage={handleWebViewMessage}
         style={styles.arContainer}
       />
 
