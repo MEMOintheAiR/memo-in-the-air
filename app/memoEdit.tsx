@@ -33,6 +33,10 @@ export default function MemoEdit() {
   const [isEditable, setIsEditable] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
 
+  function handleMoveToBack() {
+    router.back();
+  }
+
   async function handleClickHeaderButton(): Promise<undefined> {
     switch (buttonText) {
       case DONE_BUTTON: {
@@ -80,7 +84,7 @@ export default function MemoEdit() {
       </Modal>
 
       <SafeAreaView style={styles.headerContainer}>
-        <Pressable style={styles.headerButton}>
+        <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
           <PreviousIcon width="20" height="20" color="#343A40" />
         </Pressable>
         <Text style={styles.headerTitle}>{title}</Text>
