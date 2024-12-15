@@ -40,17 +40,6 @@
           "backgroundColor": "#ffffff"
         }
       ],
-      [
-        "@reactvision/react-viro",
-        {
-          "ios": {
-            "cameraUsagePermission": "MEMO in the AiR uses your camera for AR experiences. This is a custom InfoPlist string!",
-            "microphoneUsagePermission": "MEMO in the AiR uses your microphone for AR experiences. This is a custom InfoPlist string!",
-            "photosPermission": "MEMO in the AiR would like to read photos for AR experiences. This is a custom InfoPlist string!",
-            "savephotosPermission": "MEMO in the AiR would like to save photos to your library during AR experiences. This is a custom InfoPlist string!"
-          }
-        }
-      ],
       "expo-secure-store",
       [
         "expo-location",
