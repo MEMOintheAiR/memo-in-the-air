@@ -58,6 +58,31 @@ export default function ARWebView() {
     router.back();
   }
 
+  function putMemoList() {
+    if (memoList.length === 0) {
+      return;
+    }
+
+    let index = 0;
+    let memoHtmlToAdd = "";
+
+    for (const [key, value] of Object.entries(memoList)) {
+      memoHtmlToAdd += `
+        const memo${index} = document.createElement("a-plane");
+        memo${index}.setAttribute("id", "${key}");
+        memo${index}.setAttribute("gps-new-entity-place", "latitude: ${value.latitude}; longitude: ${value.longitude};");
+        memo${index}.setAttribute("position", "0 ${value.altitude} -5");
+        memo${index}.setAttribute("material", "color: #FFFF4C;");
+
+        document.getElementById("arCamera")?.append(memo${index});
+      `;
+      index++;
+    }
+    memoHtmlToAdd += "true;";
+
+    return memoHtmlToAdd;
+  }
+
   function handleClickPlusButton() {
     if (!isGridVisible) {
       setIsGridVisible(true);
@@ -89,6 +114,7 @@ export default function ARWebView() {
         javaScriptEnabled={true}
         mediaPlaybackRequiresUserAction={false}
         allowsInlineMediaPlayback={true}
+        injectedJavaScript={putMemoList()}
         onMessage={handleWebViewMessage}
         style={styles.arContainer}
       />
