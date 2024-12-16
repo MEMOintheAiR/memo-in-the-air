@@ -3,7 +3,7 @@ import { StateCreator } from "zustand";
 type locationType = {
   latitude: number;
   longitude: number;
-  altitude: number | null;
+  altitude: number;
 };
 
 export interface UserSlice {

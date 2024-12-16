@@ -28,7 +28,7 @@ export default function ARWebView() {
       setUserLocation({
         latitude: coords.latitude,
         longitude: coords.longitude,
-        altitude: coords.altitude,
+        altitude: coords.altitude || 0,
       });
     }
   }
@@ -40,7 +40,7 @@ export default function ARWebView() {
       setMemoLocation({
         latitude: coords.latitude,
         longitude: coords.longitude,
-        altitude: coords.altitude,
+        altitude: coords.altitude || 0,
       });
     }
   }
