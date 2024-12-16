@@ -87,6 +87,11 @@ export default function ARWebView() {
     if (!isGridVisible) {
       setIsGridVisible(true);
       webViewRef.current?.injectJavaScript(`
+        const arCamera = document.createElement("a-camera");
+        arCamera.setAttribute("id", "arCamera");
+        arCamera.setAttribute("gps-new-camera", "");
+        arCamera.setAttribute("arjs-device-orientation-controls", "smoothingFactor: 0.1");
+
         const aPlane = document.createElement("a-plane");
         aPlane.setAttribute("position", "0 0 -3");
         aPlane.setAttribute("rotation", "0 0 0");
@@ -95,7 +100,8 @@ export default function ARWebView() {
         aPlane.setAttribute("material", "color: #FFFF4C; opacity: 0.7;");
         aPlane.setAttribute("id", "memoGrid");
 
-        document.getElementById("arCamera")?.appendChild(aPlane);
+        arCamera.appendChild(aPlane);
+        document.getElementById("aScene").appendChild(arCamera);
 
         document.getElementById("aScene").addEventListener("click", function () {
           window.ReactNativeWebView.postMessage("grid-click");
