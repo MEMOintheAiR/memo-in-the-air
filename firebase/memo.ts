@@ -26,7 +26,7 @@ export async function createMemo({
   });
 }
 
-export async function getUserMemoList(userId: string) {
+export async function getMemoList(userId: string) {
   const snapshot = await get(ref(database, `memo/${userId}`));
   return snapshot.val();
 }
