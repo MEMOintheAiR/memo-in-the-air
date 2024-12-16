@@ -11,6 +11,7 @@ import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
   const memoList = useBoundStore((state) => state.memoList);
+  const userLocation = useBoundStore((state) => state.userLocation);
   const setUserLocation = useBoundStore((state) => state.setUserLocation);
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
 
@@ -58,7 +59,7 @@ export default function ARWebView() {
     router.back();
   }
 
-  function putMemoList() {
+  function putMemoList(): string | undefined {
     if (memoList.length === 0) {
       return;
     }
@@ -67,14 +68,18 @@ export default function ARWebView() {
     let memoHtmlToAdd = "";
 
     for (const [key, value] of Object.entries(memoList)) {
+      const xPosition: number = (Number(value.latitude) - userLocation.latitude) * 111000;
+      const yPosition: number = (Number(value.longitude) - userLocation.longitude) * 88804;
+
       memoHtmlToAdd += `
         const memo${index} = document.createElement("a-plane");
         memo${index}.setAttribute("id", "${key}");
-        memo${index}.setAttribute("gps-new-entity-place", "latitude: ${value.latitude}; longitude: ${value.longitude};");
-        memo${index}.setAttribute("position", "0 ${value.altitude} -5");
+        memo${index}.setAttribute("position", "${yPosition} ${xPosition} -5");
         memo${index}.setAttribute("material", "color: #FFFF4C;");
+        memo${index}.setAttribute("width", "1.5");
+        memo${index}.setAttribute("height", "1.5");
 
-        document.getElementById("arCamera")?.append(memo${index});
+        document.getElementById("aScene")?.append(memo${index});
       `;
       index++;
     }
