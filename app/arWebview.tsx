@@ -2,17 +2,52 @@ import HomeSvg from "@/assets/images/home.svg";
 import MemoListSvg from "@/assets/images/memoList.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
+import { useBoundStore } from "@/store/useBoundStore";
+import * as Location from "expo-location";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
+  const memoList = useBoundStore((state) => state.memoList);
+  const setUserLocation = useBoundStore((state) => state.setUserLocation);
+  const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
+
   const webViewRef = useRef<WebView>(null);
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
 
-  function handleWebViewMessage(event: WebViewMessageEvent) {
+  useEffect(() => {
+    getUserCurrentLocation();
+  }, []);
+
+  async function getUserCurrentLocation() {
+    const { coords } = await Location.getCurrentPositionAsync();
+
+    if (coords) {
+      setUserLocation({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        altitude: coords.altitude,
+      });
+    }
+  }
+
+  async function getMemoCurrentLocation() {
+    const { coords } = await Location.getCurrentPositionAsync();
+
+    if (coords) {
+      setMemoLocation({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        altitude: coords.altitude,
+      });
+    }
+  }
+
+  async function handleWebViewMessage(event: WebViewMessageEvent) {
     const type: string = event.nativeEvent.data;
+    await getMemoCurrentLocation();
 
     if (type === "grid-click") {
       router.push("/memoEdit");
