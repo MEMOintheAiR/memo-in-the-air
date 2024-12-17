@@ -68,13 +68,14 @@ export default function ARWebView() {
     let memoHtmlToAdd = "";
 
     for (const [key, value] of Object.entries(memoList)) {
-      const xPosition: number = (Number(value.latitude) - userLocation.latitude) * 111000;
-      const yPosition: number = (Number(value.longitude) - userLocation.longitude) * 88804;
+      const xPosition: number = (Number(value.longitude) - userLocation.longitude) * 88804;
+      const yPosition: number = Number(value.altitude) - userLocation.altitude;
+      const zPosition: number = (Number(value.latitude) - userLocation.latitude) * 111000;
 
       memoHtmlToAdd += `
         const memo${index} = document.createElement("a-plane");
         memo${index}.setAttribute("id", "${key}");
-        memo${index}.setAttribute("position", "${yPosition} ${xPosition} -5");
+        memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
         memo${index}.setAttribute("material", "color: #FFFF4C;");
         memo${index}.setAttribute("width", "1.5");
         memo${index}.setAttribute("height", "1.5");
