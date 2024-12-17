@@ -73,6 +73,15 @@ export default function ARWebView() {
       const zPosition: number = (Number(value.latitude) - userLocation.latitude) * 111000;
 
       memoHtmlToAdd += `
+        const memoText${index} = document.createElement("a-entity");
+        memoText${index}.setAttribute("text", {
+          value: "${value.content}",
+          color: "#000000",
+          align: "center",
+        });
+        memoText${index}.setAttribute("position", "0 0 0.1");
+        memoText${index}.setAttribute("scale", "5 5 0");
+
         const memo${index} = document.createElement("a-plane");
         memo${index}.setAttribute("id", "${key}");
         memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
@@ -80,7 +89,8 @@ export default function ARWebView() {
         memo${index}.setAttribute("width", "1.5");
         memo${index}.setAttribute("height", "1.5");
 
-        document.getElementById("aScene")?.append(memo${index});
+        memo${index}.appendChild(memoText${index});
+        document.getElementById("aScene")?.appendChild(memo${index});
       `;
       index++;
     }
