@@ -22,7 +22,7 @@ export default function ARWebView() {
     getUserCurrentLocation();
   }, []);
 
-  async function getUserCurrentLocation() {
+  async function getUserCurrentLocation(): Promise<void> {
     const { coords } = await Location.getCurrentPositionAsync();
 
     if (coords) {
@@ -34,7 +34,7 @@ export default function ARWebView() {
     }
   }
 
-  async function getMemoCurrentLocation() {
+  async function getMemoCurrentLocation(): Promise<void> {
     const { coords } = await Location.getCurrentPositionAsync();
 
     if (coords) {
@@ -46,7 +46,7 @@ export default function ARWebView() {
     }
   }
 
-  async function handleWebViewMessage(event: WebViewMessageEvent) {
+  async function handleWebViewMessage(event: WebViewMessageEvent): Promise<void> {
     const type: string = event.nativeEvent.data;
     await getMemoCurrentLocation();
 
@@ -55,7 +55,7 @@ export default function ARWebView() {
     }
   }
 
-  function handleMoveToHome() {
+  function handleMoveToHome(): void {
     router.back();
   }
 
@@ -89,7 +89,7 @@ export default function ARWebView() {
     return memoHtmlToAdd;
   }
 
-  function handleClickPlusButton() {
+  function handleClickPlusButton(): void {
     if (!isGridVisible) {
       setIsGridVisible(true);
       webViewRef.current?.injectJavaScript(`
