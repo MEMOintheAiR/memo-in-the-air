@@ -73,13 +73,10 @@ export default function ARWebView() {
 
     for (const [key, value] of Object.entries(memoList)) {
       const xPosition: number =
-        Number((Number(value.longitude) - userLocation.longitude).toFixed(8)) * 88804;
-      const yPosition: number = -Number(
-        (Number(value.altitude) - userLocation.altitude).toFixed(8),
-      );
-      const zPosition: number = Number(
-        ((Number(value.latitude) - userLocation.latitude) * 111000).toFixed(5),
-      );
+        Number((value.longitude - userLocation.longitude).toFixed(5)) * 88804;
+      const yPosition: number = -Number((userLocation.altitude - value.altitude).toFixed(2));
+      const zPosition: number =
+        Number((value.latitude - userLocation.latitude).toFixed(5)) * 111000;
       const fontSize = zPosition < 0 ? -(3 * zPosition) : 3 * zPosition;
       const memoSize = zPosition < 5 ? Math.abs(1 * zPosition) : Math.abs(1 * zPosition) / 2;
 
@@ -118,13 +115,13 @@ export default function ARWebView() {
     let memoHtmlToUpdate = "";
     for (const [key, value] of Object.entries(memoList)) {
       const movingXPosition: number =
-        Number((Number(value.longitude) - userLocation.longitude).toFixed(8)) * 88804 -
+        Number((value.longitude - userLocation.longitude).toFixed(8)) * 88804 -
         Number((userLocation.longitude - longitude).toFixed(8)) * 88804;
       const movingYPosition: number =
-        Number((Number(value.altitude) - userLocation.altitude).toFixed(8)) -
+        Number((value.altitude - userLocation.altitude).toFixed(8)) -
         Number((userLocation.altitude - altitude).toFixed(8));
       const movingZPosition: number =
-        Number((Number(value.latitude) - userLocation.latitude).toFixed(8)) * 111000 -
+        Number((value.latitude - userLocation.latitude).toFixed(8)) * 111000 -
         Number((userLocation.latitude - latitude).toFixed(8)) * 111000;
 
       memoHtmlToUpdate += `

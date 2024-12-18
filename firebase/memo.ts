@@ -1,6 +1,16 @@
 import { database } from "@/firebaseConfig";
 import { Database, get, ref, set } from "firebase/database";
 
+type memoType = {
+  memoId: string;
+  latitude: number;
+  longitude: number;
+  altitude: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
 export async function createMemo({
   userId,
   memoId,
@@ -28,5 +38,17 @@ export async function createMemo({
 
 export async function getMemoList(userId: string) {
   const snapshot = await get(ref(database, `memo/${userId}`));
-  return snapshot.val();
+
+  const memoList: memoType[] = [];
+  for (const [key, value] of Object.entries<memoType>(snapshot.val())) {
+    memoList.push({
+      ...value,
+      memoId: key,
+      latitude: Number(value.latitude),
+      longitude: Number(value.longitude),
+      altitude: Number(value.altitude),
+    });
+  }
+
+  return memoList;
 }

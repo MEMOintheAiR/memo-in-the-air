@@ -7,13 +7,10 @@ type locationType = {
 };
 
 type memoType = {
-  [key: string]: memoIntoType;
-};
-
-type memoIntoType = {
-  latitude: string;
-  longitude: string;
-  altitude: string;
+  memoId: string;
+  latitude: number;
+  longitude: number;
+  altitude: number;
   content: string;
   createdAt: string;
   updatedAt: string;
