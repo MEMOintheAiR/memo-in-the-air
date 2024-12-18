@@ -1,5 +1,6 @@
 import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
+import * as Location from "expo-location";
 import { router } from "expo-router";
 import { useEffect } from "react";
 import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from "react-native";
@@ -7,6 +8,7 @@ import { ActivityIndicator, SafeAreaView, StyleSheet, Text } from "react-native"
 export default function Loading() {
   const userId = useBoundStore((state) => state.userId);
   const setMemoList = useBoundStore((state) => state.setMemoList);
+  const setUserLocation = useBoundStore((state) => state.setUserLocation);
 
   async function getUserMemoList() {
     const memoList = await getMemoList(userId);
@@ -18,7 +20,20 @@ export default function Loading() {
     }, 1000);
   }
 
+  async function getUserCurrentLocation(): Promise<void> {
+    const { coords } = await Location.getCurrentPositionAsync();
+
+    if (coords) {
+      setUserLocation({
+        latitude: coords.latitude,
+        longitude: coords.longitude,
+        altitude: coords.altitude || 0,
+      });
+    }
+  }
+
   useEffect(() => {
+    getUserCurrentLocation();
     getUserMemoList();
   }, []);
 
