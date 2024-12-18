@@ -12,26 +12,25 @@ import { WebView, WebViewMessageEvent } from "react-native-webview";
 export default function ARWebView() {
   const memoList = useBoundStore((state) => state.memoList);
   const userLocation = useBoundStore((state) => state.userLocation);
-  const setUserLocation = useBoundStore((state) => state.setUserLocation);
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
 
   const webViewRef = useRef<WebView>(null);
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    getUserCurrentLocation();
+    watchUserLocationChanged();
   }, []);
 
-  async function getUserCurrentLocation(): Promise<void> {
-    const { coords } = await Location.getCurrentPositionAsync();
+  function watchUserLocationChanged(): void {
+    Location.watchPositionAsync({ distanceInterval: 0.1 }, ({ coords }) => {
+      if (coords && userLocation.latitude !== 0 && userLocation.longitude !== 0) {
+        const changedLatitude = coords.latitude;
+        const changedLongitude = coords.longitude;
+        const changedAltitude = coords.altitude || 0;
 
-    if (coords) {
-      setUserLocation({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        altitude: coords.altitude || 0,
-      });
-    }
+        updateMemoPosition(changedLatitude, changedLongitude, changedAltitude);
+      }
+    });
   }
 
   async function getMemoCurrentLocation(): Promise<void> {
@@ -60,7 +59,12 @@ export default function ARWebView() {
   }
 
   function putMemoList(): string | undefined {
-    if (memoList.length === 0) {
+    if (
+      Object.keys(memoList).length === 0 ||
+      userLocation.latitude === 0 ||
+      userLocation.longitude === 0 ||
+      userLocation.altitude === 0
+    ) {
       return;
     }
 
@@ -68,9 +72,16 @@ export default function ARWebView() {
     let memoHtmlToAdd = "";
 
     for (const [key, value] of Object.entries(memoList)) {
-      const xPosition: number = (Number(value.longitude) - userLocation.longitude) * 88804;
-      const yPosition: number = Number(value.altitude) - userLocation.altitude;
-      const zPosition: number = (Number(value.latitude) - userLocation.latitude) * 111000;
+      const xPosition: number =
+        Number((Number(value.longitude) - userLocation.longitude).toFixed(8)) * 88804;
+      const yPosition: number = -Number(
+        (Number(value.altitude) - userLocation.altitude).toFixed(8),
+      );
+      const zPosition: number = Number(
+        ((Number(value.latitude) - userLocation.latitude) * 111000).toFixed(5),
+      );
+      const fontSize = zPosition < 0 ? -(3 * zPosition) : 3 * zPosition;
+      const memoSize = zPosition < 5 ? Math.abs(1 * zPosition) : Math.abs(1 * zPosition) / 2;
 
       memoHtmlToAdd += `
         const memoText${index} = document.createElement("a-entity");
@@ -80,23 +91,49 @@ export default function ARWebView() {
           align: "center",
         });
         memoText${index}.setAttribute("position", "0 0 0.1");
-        memoText${index}.setAttribute("scale", "5 5 0");
+        memoText${index}.setAttribute("scale", "${fontSize} ${fontSize} 0");
 
         const memo${index} = document.createElement("a-plane");
         memo${index}.setAttribute("id", "${key}");
         memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
         memo${index}.setAttribute("material", "color: #FFFF4C;");
-        memo${index}.setAttribute("width", "1.5");
-        memo${index}.setAttribute("height", "1.5");
+        memo${index}.setAttribute("width", "${memoSize}");
+        memo${index}.setAttribute("height", "${memoSize}");
 
         memo${index}.appendChild(memoText${index});
         document.getElementById("aScene")?.appendChild(memo${index});
       `;
       index++;
     }
-    memoHtmlToAdd += "true;";
 
+    memoHtmlToAdd += "true;";
     return memoHtmlToAdd;
+  }
+
+  function updateMemoPosition(latitude: number, longitude: number, altitude: number): void | null {
+    if (Object.keys(memoList).length === 0) {
+      return null;
+    }
+
+    let memoHtmlToUpdate = "";
+    for (const [key, value] of Object.entries(memoList)) {
+      const movingXPosition: number =
+        Number((Number(value.longitude) - userLocation.longitude).toFixed(8)) * 88804 -
+        Number((userLocation.longitude - longitude).toFixed(8)) * 88804;
+      const movingYPosition: number =
+        Number((Number(value.altitude) - userLocation.altitude).toFixed(8)) -
+        Number((userLocation.altitude - altitude).toFixed(8));
+      const movingZPosition: number =
+        Number((Number(value.latitude) - userLocation.latitude).toFixed(8)) * 111000 -
+        Number((userLocation.latitude - latitude).toFixed(8)) * 111000;
+
+      memoHtmlToUpdate += `
+        document.getElementById("${key}").setAttribute("position", "${movingXPosition} ${movingYPosition} ${movingZPosition < 0 ? movingZPosition : -movingZPosition}");
+      `;
+    }
+    memoHtmlToUpdate += "true;";
+
+    webViewRef.current?.injectJavaScript(memoHtmlToUpdate);
   }
 
   function handleClickPlusButton(): void {
