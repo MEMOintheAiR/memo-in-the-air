@@ -46,6 +46,12 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow MEMO in the AiR to use your location."
         }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow MEMO in the AiR to access your device motion."
+        }
       ]
     ],
     "experiments": {
