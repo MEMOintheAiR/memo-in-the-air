@@ -138,6 +138,7 @@ export default function ARWebView() {
         allowsInlineMediaPlayback={true}
         injectedJavaScript={putMemoList()}
         onMessage={handleWebViewMessage}
+        mediaCapturePermissionGrantType={"grantIfSameHostElsePrompt"}
         style={styles.arContainer}
       />
 
