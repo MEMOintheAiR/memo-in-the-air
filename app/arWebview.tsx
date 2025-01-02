@@ -5,6 +5,7 @@ import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { useBoundStore } from "@/store/useBoundStore";
 import * as Location from "expo-location";
 import { router } from "expo-router";
+import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
@@ -18,19 +19,49 @@ export default function ARWebView() {
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
 
   useEffect(() => {
-    watchUserLocationChanged();
+    watchUserChangedLocation();
+
+    return () => {
+      DeviceMotion.removeAllListeners();
+    };
   }, []);
 
-  function watchUserLocationChanged(): void {
-    Location.watchPositionAsync({ distanceInterval: 0.1 }, ({ coords }) => {
-      if (coords && userLocation.latitude !== 0 && userLocation.longitude !== 0) {
-        const changedLatitude = coords.latitude;
-        const changedLongitude = coords.longitude;
-        const changedAltitude = coords.altitude || 0;
+  function watchUserChangedLocation() {
+    DeviceMotion.setUpdateInterval(100);
 
-        updateMemoPosition(changedLatitude, changedLongitude, changedAltitude);
-      }
+    DeviceMotion.addListener((deviceSensor: DeviceMotionMeasurement) => {
+      updateDevicePosition(
+        Number(deviceSensor.accelerationIncludingGravity.x.toFixed(6)),
+        Number(deviceSensor.accelerationIncludingGravity.y.toFixed(6)),
+        Number(deviceSensor.accelerationIncludingGravity.z.toFixed(6)),
+      );
     });
+  }
+
+  function updateDevicePosition(xPosition: number, yPosition: number, zPosition: number): void {
+    let memoHtmlToUpdate = "";
+    for (const memo of Object.values(memoList)) {
+      const movingXPosition: number = Number(
+        (((userLocation.latitude - memo.latitude) * 0.111) / 0.000001 - xPosition).toFixed(6),
+      );
+      const movingYPosition: number = Number(
+        (memo.altitude - userLocation.altitude - yPosition).toFixed(6),
+      );
+      const movingZPosition: number = Number(
+        (((userLocation.longitude - memo.longitude) * 0.089) / 0.000001 + zPosition).toFixed(6),
+      );
+      const changedMemoSize: number =
+        movingZPosition < 5 ? Math.abs(1 * movingZPosition) : Math.abs(1 * movingZPosition) / 2;
+
+      memoHtmlToUpdate += `
+        document.getElementById("${memo.memoId}").setAttribute("position", "${movingXPosition} ${movingYPosition} ${movingZPosition}");
+        document.getElementById("${memo.memoId}").setAttribute("width", "${changedMemoSize}");
+        document.getElementById("${memo.memoId}").setAttribute("height", "${changedMemoSize}");
+      `;
+    }
+    memoHtmlToUpdate += "true;";
+
+    webViewRef.current?.injectJavaScript(memoHtmlToUpdate);
   }
 
   async function getMemoCurrentLocation(): Promise<void> {
@@ -81,15 +112,15 @@ export default function ARWebView() {
       memoHtmlToAdd += `
         const memoText${index} = document.createElement("a-entity");
         memoText${index}.setAttribute("text", {
-          value: "${value.content}",
+          value: "${memo.content}",
           color: "#000000",
           align: "center",
         });
-        memoText${index}.setAttribute("position", "0 0 0.1");
-        memoText${index}.setAttribute("scale", "${fontSize} ${fontSize} 0");
+        memoText${index}.setAttribute("position", "0 0 0.001");
+        memoText${index}.setAttribute("scale", "${memoSize * 3} ${memoSize * 3} 0");
 
         const memo${index} = document.createElement("a-plane");
-        memo${index}.setAttribute("id", "${key}");
+        memo${index}.setAttribute("id", "${memo.memoId}");
         memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
         memo${index}.setAttribute("material", "color: #FFFF4C;");
         memo${index}.setAttribute("width", "${memoSize}");
@@ -100,35 +131,9 @@ export default function ARWebView() {
       `;
       index++;
     }
+    memoHtmlToAdd += " true;";
 
-    memoHtmlToAdd += "true;";
     return memoHtmlToAdd;
-  }
-
-  function updateMemoPosition(latitude: number, longitude: number, altitude: number): void | null {
-    if (Object.keys(memoList).length === 0) {
-      return null;
-    }
-
-    let memoHtmlToUpdate = "";
-    for (const [key, value] of Object.entries(memoList)) {
-      const movingXPosition: number =
-        Number((value.longitude - userLocation.longitude).toFixed(8)) * 88804 -
-        Number((userLocation.longitude - longitude).toFixed(8)) * 88804;
-      const movingYPosition: number =
-        Number((value.altitude - userLocation.altitude).toFixed(8)) -
-        Number((userLocation.altitude - altitude).toFixed(8));
-      const movingZPosition: number =
-        Number((value.latitude - userLocation.latitude).toFixed(8)) * 111000 -
-        Number((userLocation.latitude - latitude).toFixed(8)) * 111000;
-
-      memoHtmlToUpdate += `
-        document.getElementById("${key}").setAttribute("position", "${movingXPosition} ${movingYPosition} ${movingZPosition < 0 ? movingZPosition : -movingZPosition}");
-      `;
-    }
-    memoHtmlToUpdate += "true;";
-
-    webViewRef.current?.injectJavaScript(memoHtmlToUpdate);
   }
 
   function handleClickPlusButton(): void {
