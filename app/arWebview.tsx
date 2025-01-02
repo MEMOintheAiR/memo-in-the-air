@@ -3,6 +3,8 @@ import MemoListSvg from "@/assets/images/memoList.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { useBoundStore } from "@/store/useBoundStore";
+import { fixToSixDemicalPoints } from "@/utils/number";
+import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
 import * as Location from "expo-location";
 import { router } from "expo-router";
 import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
@@ -31,9 +33,9 @@ export default function ARWebView() {
 
     DeviceMotion.addListener((deviceSensor: DeviceMotionMeasurement) => {
       updateDevicePosition(
-        Number(deviceSensor.accelerationIncludingGravity.x.toFixed(6)),
-        Number(deviceSensor.accelerationIncludingGravity.y.toFixed(6)),
-        Number(deviceSensor.accelerationIncludingGravity.z.toFixed(6)),
+        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.x),
+        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.y),
+        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.z),
       );
     });
   }
@@ -41,14 +43,14 @@ export default function ARWebView() {
   function updateDevicePosition(xPosition: number, yPosition: number, zPosition: number): void {
     let memoHtmlToUpdate = "";
     for (const memo of Object.values(memoList)) {
-      const movingXPosition: number = Number(
-        (((userLocation.latitude - memo.latitude) * 0.111) / 0.000001 - xPosition).toFixed(6),
+      const movingXPosition: number = fixToSixDemicalPoints(
+        setXPosition(userLocation.latitude, memo.latitude) - xPosition,
       );
-      const movingYPosition: number = Number(
-        (memo.altitude - userLocation.altitude - yPosition).toFixed(6),
+      const movingYPosition: number = fixToSixDemicalPoints(
+        setYPosition(userLocation.altitude, memo.altitude) - yPosition,
       );
-      const movingZPosition: number = Number(
-        (((userLocation.longitude - memo.longitude) * 0.089) / 0.000001 + zPosition).toFixed(6),
+      const movingZPosition: number = fixToSixDemicalPoints(
+        setZPosition(userLocation.longitude, memo.longitude) + zPosition,
       );
       const changedMemoSize: number =
         movingZPosition < 5 ? Math.abs(1 * movingZPosition) : Math.abs(1 * movingZPosition) / 2;
@@ -69,9 +71,9 @@ export default function ARWebView() {
 
     if (coords) {
       setMemoLocation({
-        latitude: Number(coords.latitude.toFixed(6)),
-        longitude: Number(coords.longitude.toFixed(6)),
-        altitude: Number(coords.altitude?.toFixed(6)) || 0,
+        latitude: fixToSixDemicalPoints(coords.latitude),
+        longitude: fixToSixDemicalPoints(coords.longitude),
+        altitude: fixToSixDemicalPoints(coords.altitude || 0),
       });
     }
   }
@@ -103,10 +105,9 @@ export default function ARWebView() {
     let memoHtmlToAdd = "";
 
     for (const memo of Object.values(memoList)) {
-      const xPosition: number = ((userLocation.latitude - memo.latitude) * 0.111) / 0.000001;
-      const yPosition: number = memo.altitude - userLocation.altitude;
-      const zPosition: number =
-        ((userLocation.longitude - memo.longitude) * 0.089) / 0.000001 || -3;
+      const xPosition: number = setXPosition(userLocation.latitude, memo.latitude);
+      const yPosition: number = setYPosition(userLocation.altitude, memo.altitude);
+      const zPosition: number = setZPosition(userLocation.longitude, memo.longitude);
       const memoSize = zPosition < 5 ? Math.abs(1 * zPosition) : Math.abs(1 * zPosition) / 2;
 
       memoHtmlToAdd += `
@@ -121,7 +122,7 @@ export default function ARWebView() {
 
         const memo${index} = document.createElement("a-plane");
         memo${index}.setAttribute("id", "${memo.memoId}");
-        memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
+        memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition}");
         memo${index}.setAttribute("material", "color: #FFFF4C;");
         memo${index}.setAttribute("width", "${memoSize}");
         memo${index}.setAttribute("height", "${memoSize}");

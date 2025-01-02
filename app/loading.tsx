@@ -1,5 +1,6 @@
 import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
+import { fixToSixDemicalPoints } from "@/utils/number";
 import * as Location from "expo-location";
 import { router } from "expo-router";
 import { useEffect } from "react";
@@ -25,9 +26,9 @@ export default function Loading() {
 
     if (coords) {
       setUserLocation({
-        latitude: Number(coords.latitude.toFixed(6)),
-        longitude: Number(coords.longitude.toFixed(6)),
-        altitude: Number(coords.altitude?.toFixed(6)) || 0,
+        latitude: fixToSixDemicalPoints(coords.latitude),
+        longitude: fixToSixDemicalPoints(coords.longitude),
+        altitude: fixToSixDemicalPoints(coords.altitude || 0),
       });
     }
   }
