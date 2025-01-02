@@ -71,13 +71,11 @@ export default function ARWebView() {
     let index = 0;
     let memoHtmlToAdd = "";
 
-    for (const [key, value] of Object.entries(memoList)) {
-      const xPosition: number =
-        Number((value.longitude - userLocation.longitude).toFixed(5)) * 88804;
-      const yPosition: number = -Number((userLocation.altitude - value.altitude).toFixed(2));
+    for (const memo of Object.values(memoList)) {
+      const xPosition: number = ((userLocation.latitude - memo.latitude) * 0.111) / 0.000001;
+      const yPosition: number = memo.altitude - userLocation.altitude;
       const zPosition: number =
-        Number((value.latitude - userLocation.latitude).toFixed(5)) * 111000;
-      const fontSize = zPosition < 0 ? -(3 * zPosition) : 3 * zPosition;
+        ((userLocation.longitude - memo.longitude) * 0.089) / 0.000001 || -3;
       const memoSize = zPosition < 5 ? Math.abs(1 * zPosition) : Math.abs(1 * zPosition) / 2;
 
       memoHtmlToAdd += `
