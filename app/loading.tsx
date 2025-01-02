@@ -25,9 +25,9 @@ export default function Loading() {
 
     if (coords) {
       setUserLocation({
-        latitude: coords.latitude,
-        longitude: coords.longitude,
-        altitude: coords.altitude || 0,
+        latitude: Number(coords.latitude.toFixed(6)),
+        longitude: Number(coords.longitude.toFixed(6)),
+        altitude: Number(coords.altitude?.toFixed(6)) || 0,
       });
     }
   }

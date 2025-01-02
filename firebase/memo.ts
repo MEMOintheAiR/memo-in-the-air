@@ -24,7 +24,7 @@ export async function createMemo({
   content: string;
   latitude: number;
   longitude: number;
-  altitude: number | null;
+  altitude: number | 0;
 }) {
   await set(ref(database as Database, `memo/${userId}/${memoId}`), {
     content,
