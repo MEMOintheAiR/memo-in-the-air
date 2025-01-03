@@ -1,5 +1,5 @@
 import HomeSvg from "@/assets/images/home.svg";
-import MemoListSvg from "@/assets/images/memoList.svg";
+import MapMarkerSvg from "@/assets/images/mapMarker.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { useBoundStore } from "@/store/useBoundStore";
@@ -186,8 +186,8 @@ export default function ARWebView() {
 
       <View style={styles.bottomContainer}>
         <Pressable style={styles.iconContainer} onPress={handleMoveToHome}>
-          <HomeSvg width="30%" height="30%" color="#343A40" />
-          <Text style={styles.iconText}>{MAIN_PAGE}</Text>
+          <HomeSvg width="38%" height="38%" color="#343A40" />
+          <Text style={styles.homeText}>{MAIN_PAGE}</Text>
         </Pressable>
 
         {isGridVisible ? (
@@ -199,8 +199,8 @@ export default function ARWebView() {
         )}
 
         <Pressable style={styles.iconContainer} onPress={handleMoveToMemoList}>
-          <MemoListSvg width="30%" height="30%" color="#343A40" />
-          <Text style={styles.iconText}>{MEMO_LIST_PAGE}</Text>
+          <MapMarkerSvg width="34%" height="34%" color="#343A40" />
+          <Text style={styles.listText}>{MEMO_LIST_PAGE}</Text>
         </Pressable>
       </View>
     </>
@@ -220,9 +220,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  iconText: {
+  homeText: {
     fontSize: 15,
     marginTop: 8,
+    color: "#343A40",
+  },
+  listText: {
+    fontSize: 15,
+    marginTop: 10,
     color: "#343A40",
   },
   plusIconContainer: {
