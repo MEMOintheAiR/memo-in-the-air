@@ -8,6 +8,7 @@ export default function RootLayout() {
       <Stack.Screen name="home" options={{ headerShown: false }} />
       <Stack.Screen name="loading" options={{ headerShown: false }} />
       <Stack.Screen name="memoEdit" options={{ headerShown: false }} />
+      <Stack.Screen name="memoMap" options={{ headerShown: false }} />
       <Stack.Screen
         name="arWebview"
         options={{
