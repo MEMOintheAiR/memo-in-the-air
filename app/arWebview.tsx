@@ -91,6 +91,10 @@ export default function ARWebView() {
     router.back();
   }
 
+  function handleMoveToMemoList(): void {
+    router.push("/memoMap");
+  }
+
   function putMemoList(): string | undefined {
     if (
       Object.keys(memoList).length === 0 ||
@@ -194,7 +198,7 @@ export default function ARWebView() {
           </Pressable>
         )}
 
-        <Pressable style={styles.iconContainer}>
+        <Pressable style={styles.iconContainer} onPress={handleMoveToMemoList}>
           <MemoListSvg width="30%" height="30%" color="#343A40" />
           <Text style={styles.iconText}>{MEMO_LIST_PAGE}</Text>
         </Pressable>
