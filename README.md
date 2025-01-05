@@ -50,12 +50,7 @@
 
 ### App
 
-<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/>
-<img src="https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React Native"/>
-<img src="https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white" alt="Expo" />
-<img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black" alt="Firebase" />
-<img src="https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=Typescript&logoColor=white" alt="TypeScript"/>
-<img src="https://img.shields.io/badge/Zustand-443E38?style=flat-square" alt=”zustand”/>
+<img src="https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React"/> <img src="https://img.shields.io/badge/React_Native-61DAFB?style=flat-square&logo=react&logoColor=black" alt="React Native"/> <img src="https://img.shields.io/badge/Expo-000020?style=flat-square&logo=expo&logoColor=white" alt="Expo" /> <img src="https://img.shields.io/badge/Firebase-FFCA28?style=flat-square&logo=firebase&logoColor=black" alt="Firebase" /> <img src="https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=Typescript&logoColor=white" alt="TypeScript"/> <img src="https://img.shields.io/badge/Zustand-443E38?style=flat-square" alt=”zustand”/>
 
 ### Web
 
@@ -125,6 +120,13 @@ React Native 앱에서는 디바이스의 정보를 파악할 수 있는 `expo-d
 <details>
   <summary>UUID 생성 코드</summary>
   <div markdown="1">
+
+    import { v4 } from "uuid";
+
+    export function createUUID(): string {
+      return v4();
+    }
+
   </div>
 </details>
 
@@ -138,7 +140,21 @@ React Native 앱에서는 디바이스의 정보를 파악할 수 있는 `expo-d
 
 <details>
   <summary>expo-secure-store를 통해 사용자의 ID를 앱에 저장하는 코드</summary>
-  <div markdown="1"></div>
+  <div markdown="1">
+    
+    import * as SecureStore from "expo-secure-store";
+  
+    export async function checkUserId(): Promise<string> {
+      let userId: string | null = await SecureStore.getItemAsync("userId");
+    
+      if (userId === null) {
+        userId = createUUID();
+        await SecureStore.setItemAsync("userId", JSON.stringify(userId));
+      }
+    
+      return userId;
+    }
+  </div>
 </details>
 
 <br>
