@@ -27,12 +27,14 @@
     "expo-location": "~18.0.3",
     "expo-router": "~4.0.9",
     "expo-secure-store": "~14.0.0",
+    "expo-sensors": "~14.0.1",
     "expo-splash-screen": "~0.29.13",
     "expo-status-bar": "~2.0.0",
     "expo-symbols": "~0.2.0",
     "expo-system-ui": "~4.0.4",
     "expo-web-browser": "~14.0.1",
     "firebase": "^11.0.2",
+    "markdown-toc": "^1.2.0",
     "react": "18.3.1",
     "react-dom": "18.3.1",
     "react-native": "0.76.3",
@@ -45,8 +47,7 @@
     "react-native-web": "~0.19.13",
     "react-native-webview": "13.12.2",
     "uuid": "^11.0.3",
-    "zustand": "^5.0.2",
-    "expo-sensors": "~14.0.1"
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
