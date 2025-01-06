@@ -1,3 +1,4 @@
+import CloseIcon from "@/assets/images/close.svg";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { useState } from "react";
@@ -46,6 +47,7 @@ export default function MemoMap() {
           />
         ))}
       </MapView>
+
       <Modal
         animationType="slide"
         transparent={true}
@@ -53,17 +55,20 @@ export default function MemoMap() {
         onRequestClose={() => {
           setModalVisible(!modalVisible);
         }}
-        style={{ flex: 1 }}
+        style={styles.modalContainer}
       >
-        <View style={styles.modalContainer}>
+        <View style={styles.modalViewContainer}>
+          <View style={styles.modalHeaderContainer}>
+            <Pressable onPress={() => setModalVisible(false)} style={styles.iconContainer}>
+              <CloseIcon width="25" height="25" color="#000000" />
+            </Pressable>
+            <Text style={styles.headerText}>선택한 위치에 저장된 메모 목록</Text>
+            <View style={styles.iconContainer}></View>
+          </View>
           <FlatList
             data={clusterMemoList}
             renderItem={({ item }) => (
-              <Pressable
-                key={item.memoId}
-                onPress={() => setModalVisible(false)}
-                style={styles.memoContainer}
-              >
+              <Pressable key={item.memoId} style={styles.memoContainer}>
                 <Text style={styles.memoText}>{item.content}</Text>
               </Pressable>
             )}
@@ -85,6 +90,9 @@ const styles = StyleSheet.create({
     flex: 0.9,
   },
   modalContainer: {
+    flex: 1,
+  },
+  modalViewContainer: {
     height: "45%",
     textAlign: "center",
     justifyContent: "center",
@@ -92,6 +100,23 @@ const styles = StyleSheet.create({
     marginTop: "auto",
     paddingVertical: 20,
     backgroundColor: "#FFFFFF",
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
+  },
+  modalHeaderContainer: {
+    marginBottom: 5,
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  iconContainer: {
+    flex: 1,
+    alignItems: "flex-end",
+  },
+  headerText: {
+    flex: 7,
+    fontSize: 21,
+    fontWeight: 500,
+    textAlign: "center",
   },
   flatListContainer: {
     width: "100%",
