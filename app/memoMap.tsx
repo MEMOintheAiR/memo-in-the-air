@@ -1,6 +1,8 @@
 import CloseIcon from "@/assets/images/close.svg";
+import PreviousIcon from "@/assets/images/previous.svg";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
+import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import MapView from "react-native-map-clustering";
@@ -11,10 +13,22 @@ export default function MemoMap() {
   const memoList = useBoundStore((state) => state.memoList);
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
-  const [clusterMemoList, setClusterMemoList] = useState([]);
+  const [clusterMemoList, setClusterMemoList] = useState<memoType[] | []>([]);
+
+  function handleMoveToBack() {
+    router.back();
+  }
 
   return (
     <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
+        <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
+          <PreviousIcon width="20" height="20" color="#343A40" />
+        </Pressable>
+        <Text style={styles.headerText}>메모 목록</Text>
+        <View style={styles.headerButton} />
+      </View>
+
       <MapView
         initialRegion={{
           latitude: userLocation.latitude,
@@ -85,6 +99,25 @@ export default function MemoMap() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
+  },
+  headerContainer: {
+    flex: 0.6,
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+  headerButton: {
+    flex: 1,
+    alignItems: "center",
+    margin: "auto",
+  },
+  headerText: {
+    flex: 5,
+    fontSize: 24,
+    fontWeight: 500,
+    color: "#343A40",
+    textAlign: "center",
+    margin: "auto",
   },
   mapContainer: {
     flex: 0.9,
@@ -112,7 +145,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "flex-end",
   },
-  headerText: {
+  modalHeaderText: {
     flex: 7,
     fontSize: 21,
     fontWeight: 500,
