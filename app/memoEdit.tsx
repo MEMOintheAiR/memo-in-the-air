@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   memo: {
     width: 300,
     height: 300,
-    backgroundColor: "#F9E79F",
+    backgroundColor: "#FDE44B",
     borderColor: "#000000",
     borderWidth: 0.5,
     margin: "auto",

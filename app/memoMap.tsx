@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     aspectRatio: 1,
     marginHorizontal: 10,
     marginVertical: 13,
-    backgroundColor: "#ffc61a",
+    backgroundColor: "#FDE44B",
   },
   memoText: {
     color: "#343A40",
