@@ -1,7 +1,7 @@
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { useState } from "react";
-import { Modal, Pressable, SafeAreaView, ScrollView, StyleSheet, Text, View } from "react-native";
+import { FlatList, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import MapView from "react-native-map-clustering";
 import { Marker } from "react-native-maps";
 
@@ -56,19 +56,21 @@ export default function MemoMap() {
         style={{ flex: 1 }}
       >
         <View style={styles.modalContainer}>
-          <ScrollView style={styles.scrollViewContainer}>
-            {clusterMemoList.map((memo) => {
-              return (
-                <Pressable
-                  key={memo.memoId}
-                  onPress={() => setModalVisible(false)}
-                  style={{ backgroundColor: "#ffc61a", margin: 5, width: "40%" }}
-                >
-                  <Text>{memo.content}</Text>
-                </Pressable>
-              );
-            })}
-          </ScrollView>
+          <FlatList
+            data={clusterMemoList}
+            renderItem={({ item }) => (
+              <Pressable
+                key={item.memoId}
+                onPress={() => setModalVisible(false)}
+                style={styles.memoContainer}
+              >
+                <Text style={styles.memoText}>{item.content}</Text>
+              </Pressable>
+            )}
+            keyExtractor={(item) => item.memoId}
+            numColumns={2}
+            columnWrapperStyle={styles.flatListContainer}
+          />
         </View>
       </Modal>
     </SafeAreaView>
@@ -84,14 +86,29 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     height: "45%",
+    textAlign: "center",
+    justifyContent: "center",
+    alignItems: "center",
     marginTop: "auto",
+    paddingVertical: 20,
     backgroundColor: "#FFFFFF",
   },
-  scrollViewContainer: {
-    padding: 10,
+  flatListContainer: {
+    width: "100%",
+    justifyContent: "space-between",
+    paddingHorizontal: "8%",
   },
-  button: {
-    width: 30,
-    height: 30,
+  memoContainer: {
+    width: "40%",
+    aspectRatio: 1,
+    marginHorizontal: 10,
+    marginVertical: 13,
+    backgroundColor: "#ffc61a",
+  },
+  memoText: {
+    color: "#343A40",
+    fontSize: 18,
+    textAlign: "center",
+    margin: "auto",
   },
 });
