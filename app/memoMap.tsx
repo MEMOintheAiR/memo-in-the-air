@@ -3,7 +3,8 @@ import PreviousIcon from "@/assets/images/previous.svg";
 import { MEMO_LIST_PAGE } from "@/constants/Pages";
 import { COORDS_DELTA } from "@/constants/Variable";
 import { useBoundStore } from "@/store/useBoundStore";
-import { fixToSixDemicalPoints } from "@/utils/number";
+import { fixToSixDemicalPoints, formatDate } from "@/utils/number";
+import * as Location from "expo-location";
 import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
@@ -16,9 +17,15 @@ export default function MemoMap() {
 
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [clusterMemoList, setClusterMemoList] = useState<memoType[] | []>([]);
+  const [clusterAddress, setClusterAddress] = useState<string>("");
 
-  function handleMoveToBack() {
+  function handleMoveToBack(): void {
     router.back();
+  }
+
+  async function getClusterAddress(coords: { latitude: number; longitude: number }): Promise<void> {
+    const address = await Location.reverseGeocodeAsync(coords);
+    setClusterAddress(address[0].region + " " + address[0].district);
   }
 
   return (
@@ -39,10 +46,13 @@ export default function MemoMap() {
           longitudeDelta: COORDS_DELTA,
         }}
         mapType="standard"
-        cameraZoomRange={{ minCenterCoordinateDistance: 2320 }}
         minPoints={1}
         clusterColor="#668CFF"
-        onClusterPress={(cluster, markers) => {
+        onClusterPress={(_, markers) => {
+          getClusterAddress({
+            latitude: markers[0].properties.coordinate.latitude,
+            longitude: markers[0].properties.coordinate.longitude,
+          });
           setClusterMemoList(
             markers.map((marker) => {
               return memoList.find((memo) => memo.memoId === marker.properties?.identifier);
@@ -61,6 +71,7 @@ export default function MemoMap() {
               longitude: fixToSixDemicalPoints(memo.longitude),
             }}
             onPress={() => {
+              getClusterAddress({ latitude: memo.latitude, longitude: memo.longitude });
               setClusterMemoList([memo]);
               setModalVisible(true);
             }}
@@ -82,15 +93,20 @@ export default function MemoMap() {
             <Pressable onPress={() => setModalVisible(false)} style={styles.iconContainer}>
               <CloseIcon width="25" height="25" color="#000000" />
             </Pressable>
-            <Text style={styles.modalHeaderText}>선택한 위치에 저장된 메모 목록</Text>
+            <Text style={styles.modalHeaderText}>
+              <Text style={styles.addressText}>{clusterAddress}</Text>에 위치한 메모
+            </Text>
             <View style={styles.iconContainer}></View>
           </View>
           <FlatList
             data={clusterMemoList}
             renderItem={({ item }) => (
-              <Pressable key={item.memoId} style={styles.memoContainer}>
-                <Text style={styles.memoText}>{item.content}</Text>
-              </Pressable>
+              <View style={styles.memoInfoContainer}>
+                <Pressable key={item.memoId} style={styles.memoContainer}>
+                  <Text style={styles.memoText}>{item.content}</Text>
+                </Pressable>
+                <Text style={styles.dateText}>{formatDate(item.createdAt)}</Text>
+              </View>
             )}
             keyExtractor={(item) => item.memoId}
             numColumns={2}
@@ -157,16 +173,21 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     textAlign: "center",
   },
+  addressText: {
+    fontWeight: 700,
+  },
   flatListContainer: {
     width: "100%",
     justifyContent: "space-between",
     paddingHorizontal: "8%",
   },
-  memoContainer: {
+  memoInfoContainer: {
     width: "40%",
-    aspectRatio: 1,
     marginHorizontal: 10,
     marginVertical: 13,
+  },
+  memoContainer: {
+    aspectRatio: 1,
     backgroundColor: "#FDE44B",
   },
   memoText: {
@@ -174,5 +195,11 @@ const styles = StyleSheet.create({
     fontSize: 18,
     textAlign: "center",
     margin: "auto",
+  },
+  dateText: {
+    color: "#5B5B5B",
+    fontSize: 15,
+    textAlign: "center",
+    marginTop: 5,
   },
 });
