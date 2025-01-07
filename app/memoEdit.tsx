@@ -36,7 +36,7 @@ export default function MemoEdit() {
   function handleMoveToAR(): void {
     closeAlertModal();
     router.dismissAll();
-    router.push("/loading");
+    router.push("/arWebview");
   }
 
   function openAlertModal(isVisible: boolean, alertText: string, buttonText: string): void {
