@@ -1,9 +1,8 @@
 import PreviousIcon from "@/assets/images/previous.svg";
-import EditStyleButton from "@/components/EditStyleButton";
-import { DONE_BUTTON, SUBMIT_BUTTON } from "@/constants/Buttons";
-import { COLOR, RESIZE, SHAPE, TEXT } from "@/constants/EditStyle";
-import { INPUT_TEXT } from "@/constants/Messages";
-import { CREATE_MEMO_PAGE, INPUT_TEXT_TAB } from "@/constants/Pages";
+import AlertModal from "@/components/AlertModal";
+import { CLOSE_BUTTON, MOVE_TO_AR_BUTTON, SUBMIT_BUTTON } from "@/constants/Buttons";
+import { CREATE_MEMO_TEXT, INPUT_TEXT } from "@/constants/Messages";
+import { CREATE_MEMO_PAGE } from "@/constants/Pages";
 import { createMemo } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { createUUID } from "@/utils/uuid";
@@ -12,7 +11,6 @@ import { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Modal,
   Pressable,
   SafeAreaView,
   StyleSheet,
@@ -26,72 +24,66 @@ export default function MemoEdit() {
   const userId = useBoundStore((state) => state.userId);
   const memoLocation = useBoundStore((state) => state.memoLocation);
 
-  const [title, setTitle] = useState<string>(CREATE_MEMO_PAGE);
   const [content, setContent] = useState<string>("");
-  const [buttonText, setButtonText] = useState<string>(SUBMIT_BUTTON);
-  const [placeHolder, setPlaceHolder] = useState<string>("");
-  const [isEditable, setIsEditable] = useState<boolean>(false);
   const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [buttonMessage, setButtonMessage] = useState<string>("");
 
   function handleMoveToBack() {
     router.back();
   }
 
-  async function handleClickHeaderButton(): Promise<undefined> {
-    switch (buttonText) {
-      case DONE_BUTTON: {
-        setIsEditable(false);
-        setTitle(CREATE_MEMO_PAGE);
-        setPlaceHolder("");
-        setButtonText(SUBMIT_BUTTON);
-
-        Keyboard.dismiss();
-        return;
-      }
-
-      case SUBMIT_BUTTON: {
-        const memoId = createUUID();
-        await createMemo({ userId, memoId, content, ...memoLocation });
-        setIsModalVisible(true);
-      }
-    }
-  }
-
-  function handleClickTextButton(): void {
-    setIsEditable(true);
-    setTitle(INPUT_TEXT_TAB);
-    setPlaceHolder(INPUT_TEXT);
-    setButtonText(DONE_BUTTON);
-  }
-
   function handleMoveToAR(): void {
-    setIsModalVisible(false);
+    closeAlertModal();
     router.dismissAll();
     router.push("/loading");
   }
 
-  return (
-    <View style={styles.container}>
-      <Modal visible={isModalVisible} transparent={true} animationType="none">
-        <View style={styles.modalContainer}>
-          <View style={styles.modalTextContainer}>
-            <Text style={styles.modalText}>메모가 등록되었습니다.</Text>
-          </View>
-          <Pressable style={styles.modalButtonContainer} onPress={handleMoveToAR}>
-            <Text style={styles.modalButtonText}>등록한 메모 보러가기</Text>
-          </Pressable>
-        </View>
-      </Modal>
+  function openAlertModal(isVisible: boolean, alertText: string, buttonText: string): void {
+    setIsModalVisible(isVisible);
+    setAlertMessage(alertText);
+    setButtonMessage(buttonText);
+  }
 
-      <SafeAreaView style={styles.headerContainer}>
+  function closeAlertModal() {
+    setIsModalVisible(false);
+    setAlertMessage("");
+    setButtonMessage("");
+  }
+
+  async function handleClickHeaderButton(): Promise<undefined> {
+    if (content === "" || content.trim() === "") {
+      openAlertModal(true, INPUT_TEXT, CLOSE_BUTTON);
+      return;
+    }
+
+    Keyboard.dismiss();
+    const memoId = createUUID();
+    await createMemo({ userId, memoId, content, ...memoLocation });
+
+    openAlertModal(true, CREATE_MEMO_TEXT, MOVE_TO_AR_BUTTON);
+  }
+
+  function checkAlertModalFunction() {
+    switch (alertMessage) {
+      case INPUT_TEXT:
+        return closeAlertModal();
+      case CREATE_MEMO_TEXT:
+        return handleMoveToAR();
+      default:
+        return null;
+    }
+  }
+
+  return (
+    <SafeAreaView style={styles.container}>
+      <View style={styles.headerContainer}>
         <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
           <PreviousIcon width="20" height="20" color="#343A40" />
         </Pressable>
-        <Text style={styles.headerTitle}>{title}</Text>
-        <Pressable style={styles.headerButton} onPress={handleClickHeaderButton}>
-          <Text style={styles.headerButtonText}>{buttonText}</Text>
-        </Pressable>
-      </SafeAreaView>
+        <Text style={styles.headerTitle}>{CREATE_MEMO_PAGE}</Text>
+        <View style={styles.headerButton} />
+      </View>
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
@@ -106,35 +98,37 @@ export default function MemoEdit() {
               style={styles.textInput}
               multiline={true}
               scrollEnabled={false}
-              editable={isEditable}
               enterKeyHint="enter"
               textAlign="center"
-              placeholder={placeHolder}
+              placeholder={INPUT_TEXT}
             />
           </View>
         </KeyboardAvoidingView>
       </TouchableWithoutFeedback>
 
-      <View style={styles.editTabContainer}>
-        <EditStyleButton
-          text={TEXT}
-          imageName={require("../assets/images/text.png")}
-          onPressFunc={handleClickTextButton}
-        />
-        <EditStyleButton text={SHAPE} imageName={require("../assets/images/shape.png")} />
-        <EditStyleButton text={COLOR} imageName={require("../assets/images/colorPicker.png")} />
-        <EditStyleButton text={RESIZE} imageName={require("../assets/images/resize.png")} />
+      <View style={styles.bottomContainer}>
+        <Pressable style={styles.buttonContainer} onPress={handleClickHeaderButton}>
+          <Text style={styles.buttonText}>{SUBMIT_BUTTON}</Text>
+        </Pressable>
       </View>
-    </View>
+
+      <AlertModal
+        isModalVisible={isModalVisible}
+        alertMessage={alertMessage}
+        buttonMessage={buttonMessage}
+        buttonFunc={checkAlertModalFunction}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
   headerContainer: {
-    flex: 0.65,
+    flex: 0.8,
     flexDirection: "row",
     alignItems: "flex-end",
   },
@@ -144,7 +138,7 @@ const styles = StyleSheet.create({
     fontWeight: 600,
     color: "#343A40",
     textAlign: "center",
-    paddingBottom: 10,
+    margin: "auto",
   },
   headerButton: {
     flex: 1,
@@ -152,19 +146,20 @@ const styles = StyleSheet.create({
     margin: "auto",
   },
   headerButtonText: {
-    fontSize: 23,
+    fontSize: 24,
     fontWeight: 400,
     color: "#6CA0DC",
+    margin: "auto",
   },
   editViewContainer: {
-    flex: 8,
-    backgroundColor: "#E5E8E8",
+    flex: 10,
+    backgroundColor: "#f5f6f8",
   },
   memo: {
     width: 300,
     height: 300,
     backgroundColor: "#FDE44B",
-    borderColor: "#000000",
+    borderColor: "#343A40",
     borderWidth: 0.5,
     margin: "auto",
   },
@@ -173,41 +168,20 @@ const styles = StyleSheet.create({
     margin: "auto",
     fontSize: 23,
   },
-  editTabContainer: {
-    flex: 2,
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "flex-start",
-    paddingTop: 25,
-    backgroundColor: "#FFFFFF",
+  bottomContainer: {
+    flex: 1,
   },
-  modalContainer: {
-    width: "75%",
-    height: "20%",
-    margin: "auto",
-    backgroundColor: "white",
-    borderRadius: 10,
-  },
-  modalTextContainer: {
-    flex: 5,
+  buttonContainer: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#5E8BCE",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
   },
-  modalText: {
-    fontSize: 25,
-    color: "#343A40",
-  },
-  modalButtonContainer: {
-    flex: 2,
-    width: "100%",
-    borderTopWidth: 0.5,
-    borderTopColor: "#343A40",
-  },
-  modalButtonText: {
-    color: "#6CA0DC",
+  buttonText: {
     fontSize: 22,
-    textAlign: "center",
-    margin: "auto",
+    color: "#FFFFFF",
+    fontWeight: 600,
   },
 });
