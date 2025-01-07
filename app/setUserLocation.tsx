@@ -3,6 +3,7 @@ import { SET_CURRENT_LOCATION_BUTTON, SET_UPDATED_LOCATION_BUTTON } from "@/cons
 import { SET_LOCATION_PAGE } from "@/constants/Pages";
 import { COORDS_DELTA, DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from "@/constants/Variable";
 import { useBoundStore } from "@/store/useBoundStore";
+import { fixToSixDemicalPoints } from "@/utils/number";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
@@ -49,7 +50,11 @@ export default function SetUserLocation() {
   }
 
   function setUpUserLocation(): void {
-    setUserLocation(tempUserLocation);
+    setUserLocation({
+      latitude: fixToSixDemicalPoints(tempUserLocation.latitude),
+      longitude: fixToSixDemicalPoints(tempUserLocation.longitude),
+      altitude: fixToSixDemicalPoints(tempUserLocation.altitude),
+    });
     router.push("/arWebview");
   }
 
