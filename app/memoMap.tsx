@@ -80,7 +80,7 @@ export default function MemoMap() {
             <Pressable onPress={() => setModalVisible(false)} style={styles.iconContainer}>
               <CloseIcon width="25" height="25" color="#000000" />
             </Pressable>
-            <Text style={styles.headerText}>선택한 위치에 저장된 메모 목록</Text>
+            <Text style={styles.modalHeaderText}>선택한 위치에 저장된 메모 목록</Text>
             <View style={styles.iconContainer}></View>
           </View>
           <FlatList
@@ -124,26 +124,26 @@ const styles = StyleSheet.create({
     margin: "auto",
   },
   mapContainer: {
-    flex: 0.9,
+    flex: 8,
   },
   modalContainer: {
     flex: 1,
   },
   modalViewContainer: {
+    width: "100%",
     height: "45%",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
     marginTop: "auto",
     paddingVertical: 20,
-    backgroundColor: "#FFFFFF",
     borderTopLeftRadius: 30,
     borderTopRightRadius: 30,
+    backgroundColor: "#FFFFFF",
   },
   modalHeaderContainer: {
-    marginBottom: 5,
+    marginBottom: 8,
     flexDirection: "row",
-    justifyContent: "center",
   },
   iconContainer: {
     flex: 1,
