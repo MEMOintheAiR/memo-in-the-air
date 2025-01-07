@@ -58,6 +58,10 @@ export default function MemoMap() {
               latitude: fixToSixDemicalPoints(memo.latitude),
               longitude: fixToSixDemicalPoints(memo.longitude),
             }}
+            onPress={() => {
+              setClusterMemoList([memo]);
+              setModalVisible(true);
+            }}
           />
         ))}
       </MapView>
