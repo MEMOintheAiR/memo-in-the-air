@@ -1,5 +1,7 @@
 import CloseIcon from "@/assets/images/close.svg";
 import PreviousIcon from "@/assets/images/previous.svg";
+import { MEMO_LIST_PAGE } from "@/constants/Pages";
+import { COORDS_DELTA } from "@/constants/Variable";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { router } from "expo-router";
@@ -25,7 +27,7 @@ export default function MemoMap() {
         <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
           <PreviousIcon width="20" height="20" color="#343A40" />
         </Pressable>
-        <Text style={styles.headerText}>메모 목록</Text>
+        <Text style={styles.headerText}>{MEMO_LIST_PAGE}</Text>
         <View style={styles.headerButton} />
       </View>
 
@@ -33,8 +35,8 @@ export default function MemoMap() {
         initialRegion={{
           latitude: userLocation.latitude,
           longitude: userLocation.longitude,
-          latitudeDelta: 0.01,
-          longitudeDelta: 0.01,
+          latitudeDelta: COORDS_DELTA,
+          longitudeDelta: COORDS_DELTA,
         }}
         mapType="standard"
         cameraZoomRange={{ minCenterCoordinateDistance: 2320 }}
