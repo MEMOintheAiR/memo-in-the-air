@@ -19,6 +19,7 @@ export default function RootLayout() {
       />
       <Stack.Screen name="+not-found" options={{ headerShown: false }} />
       <Stack.Screen name="locationPermission" options={{ headerShown: false }} />
+      <Stack.Screen name="setUserLocation" options={{ headerShown: false }} />
     </Stack>
   );
 }
