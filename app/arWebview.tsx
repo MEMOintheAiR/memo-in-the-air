@@ -114,27 +114,29 @@ export default function ARWebView() {
       const zPosition: number = setZPosition(userLocation.longitude, memo.longitude);
       const memoSize = zPosition < 5 ? Math.abs(1 * zPosition) : Math.abs(1 * zPosition) / 2;
 
-      memoHtmlToAdd += `
-        const memoText${index} = document.createElement("a-entity");
-        memoText${index}.setAttribute("text", {
-          value: "${memo.content}",
-          color: "#000000",
-          align: "center",
-        });
-        memoText${index}.setAttribute("position", "0 0 0.001");
-        memoText${index}.setAttribute("scale", "${memoSize * 3} ${memoSize * 3} 0");
-
-        const memo${index} = document.createElement("a-plane");
-        memo${index}.setAttribute("id", "${memo.memoId}");
-        memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition}");
-        memo${index}.setAttribute("material", "color: #FFFF4C;");
-        memo${index}.setAttribute("width", "${memoSize}");
-        memo${index}.setAttribute("height", "${memoSize}");
-
-        memo${index}.appendChild(memoText${index});
-        document.getElementById("aScene")?.appendChild(memo${index});
-      `;
-      index++;
+      if (Math.abs(xPosition) <= 100 && Math.abs(yPosition) <= 100 && Math.abs(zPosition) <= 100) {
+        memoHtmlToAdd += `
+          const memoText${index} = document.createElement("a-entity");
+          memoText${index}.setAttribute("text", {
+            value: "${memo.content}",
+            color: "#000000",
+            align: "center",
+          });
+          memoText${index}.setAttribute("position", "0 0 0.001");
+          memoText${index}.setAttribute("scale", "${memoSize * 3} ${memoSize * 3} 0");
+  
+          const memo${index} = document.createElement("a-plane");
+          memo${index}.setAttribute("id", "${memo.memoId}");
+          memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition}");
+          memo${index}.setAttribute("material", "color: #FFFF4C;");
+          memo${index}.setAttribute("width", "${memoSize}");
+          memo${index}.setAttribute("height", "${memoSize}");
+  
+          memo${index}.appendChild(memoText${index});
+          document.getElementById("aScene")?.appendChild(memo${index});
+        `;
+        index++;
+      }
     }
     memoHtmlToAdd += " true;";
 
