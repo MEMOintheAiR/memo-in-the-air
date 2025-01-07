@@ -88,7 +88,8 @@ export default function ARWebView() {
   }
 
   function handleMoveToHome(): void {
-    router.back();
+    router.dismissAll();
+    router.push("/home");
   }
 
   function handleMoveToMemoList(): void {
