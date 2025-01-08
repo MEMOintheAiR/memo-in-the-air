@@ -1,3 +1,4 @@
 export const DEFAULT_LATITUDE = 37.5666826;
 export const DEFAULT_LONGITUDE = 126.9784045;
 export const COORDS_DELTA = 0.001;
+export const COMPASS_UPDATE_RATE = 5;

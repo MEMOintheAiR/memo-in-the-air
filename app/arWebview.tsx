@@ -2,6 +2,7 @@ import HomeSvg from "@/assets/images/home.svg";
 import MapMarkerSvg from "@/assets/images/mapMarker.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
+import { COMPASS_UPDATE_RATE } from "@/constants/Variable";
 import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
@@ -11,6 +12,7 @@ import { router } from "expo-router";
 import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import CompassHeading from "react-native-compass-heading";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
@@ -21,14 +23,17 @@ export default function ARWebView() {
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
 
   const webViewRef = useRef<WebView>(null);
+  const compassHeading = useRef<string>("");
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
 
   useEffect(() => {
     getUserMemoList();
+    watchUserChangedCompass();
     watchUserChangedLocation();
 
     return () => {
       DeviceMotion.removeAllListeners();
+      CompassHeading.stop();
     };
   }, []);
 
@@ -46,6 +51,12 @@ export default function ARWebView() {
         fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.y),
         fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.z),
       );
+    });
+  }
+
+  function watchUserChangedCompass() {
+    CompassHeading.start(COMPASS_UPDATE_RATE, ({ heading }: { heading: string }) => {
+      compassHeading.current = heading;
     });
   }
 
