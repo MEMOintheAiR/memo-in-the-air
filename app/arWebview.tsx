@@ -7,12 +7,12 @@ import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
-import * as Location from "expo-location";
 import { router } from "expo-router";
 import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import CompassHeading from "react-native-compass-heading";
+import Geolocation from "react-native-geolocation-service";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
@@ -21,6 +21,7 @@ export default function ARWebView() {
   const setMemoList = useBoundStore((state) => state.setMemoList);
   const userLocation = useBoundStore((state) => state.userLocation);
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
+  const differenceCoords = useBoundStore((state) => state.differenceCoords);
 
   const webViewRef = useRef<WebView>(null);
   const compassHeading = useRef<string>("");
@@ -86,21 +87,26 @@ export default function ARWebView() {
     webViewRef.current?.injectJavaScript(memoHtmlToUpdate);
   }
 
-  async function getMemoCurrentLocation(): Promise<void> {
-    const { coords } = await Location.getCurrentPositionAsync();
-
-    if (coords) {
-      setMemoLocation({
-        latitude: fixToSixDemicalPoints(coords.latitude),
-        longitude: fixToSixDemicalPoints(coords.longitude),
-        altitude: fixToSixDemicalPoints(coords.altitude || 0),
-      });
-    }
+  function getMemoCurrentLocation(): void {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const memoCoords = position.coords;
+        setMemoLocation({
+          latitude: fixToSixDemicalPoints(memoCoords.latitude) - differenceCoords.latitude,
+          longitude: fixToSixDemicalPoints(memoCoords.longitude) - differenceCoords.longitude,
+          altitude: fixToSixDemicalPoints(memoCoords.altitude || 0) - differenceCoords.altitude,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+    );
   }
 
-  async function handleWebViewMessage(event: WebViewMessageEvent): Promise<void> {
+  function handleWebViewMessage(event: WebViewMessageEvent): void {
     const type: string = event.nativeEvent.data;
-    await getMemoCurrentLocation();
+    getMemoCurrentLocation();
 
     if (type === "grid-click") {
       router.push("/memoEdit");
