@@ -2,6 +2,7 @@ import HomeSvg from "@/assets/images/home.svg";
 import MapMarkerSvg from "@/assets/images/mapMarker.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
+import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
@@ -13,7 +14,9 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
+  const userId = useBoundStore((state) => state.userId);
   const memoList = useBoundStore((state) => state.memoList);
+  const setMemoList = useBoundStore((state) => state.setMemoList);
   const userLocation = useBoundStore((state) => state.userLocation);
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
 
@@ -21,12 +24,18 @@ export default function ARWebView() {
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
 
   useEffect(() => {
+    getUserMemoList();
     watchUserChangedLocation();
 
     return () => {
       DeviceMotion.removeAllListeners();
     };
   }, []);
+
+  async function getUserMemoList() {
+    const memoList = await getMemoList(userId);
+    setMemoList(memoList || []);
+  }
 
   function watchUserChangedLocation() {
     DeviceMotion.setUpdateInterval(100);
