@@ -24,40 +24,26 @@ export default function ARWebView() {
   const differenceCoords = useBoundStore((state) => state.differenceCoords);
 
   const webViewRef = useRef<WebView>(null);
-  const compassHeading = useRef<string>("");
+  const compassHeading = useRef<number>(0);
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
 
   useEffect(() => {
     getUserMemoList();
-    watchUserChangedCompass();
-    watchUserChangedLocation();
+    subscribeCompass();
 
     return () => {
-      DeviceMotion.removeAllListeners();
       CompassHeading.stop();
     };
   }, []);
 
-  async function getUserMemoList() {
+  async function getUserMemoList(): Promise<void> {
     const memoList = await getMemoList(userId);
     setMemoList(memoList || []);
   }
 
-  function watchUserChangedLocation() {
-    DeviceMotion.setUpdateInterval(100);
-
-    DeviceMotion.addListener((deviceSensor: DeviceMotionMeasurement) => {
-      updateDevicePosition(
-        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.x),
-        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.y),
-        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.z),
-      );
-    });
-  }
-
-  function watchUserChangedCompass() {
+  function subscribeCompass(): void {
     CompassHeading.start(COMPASS_UPDATE_RATE, ({ heading }: { heading: string }) => {
-      compassHeading.current = heading;
+      compassHeading.current = Number(heading);
     });
   }
 
@@ -95,6 +81,7 @@ export default function ARWebView() {
           latitude: fixToSixDemicalPoints(memoCoords.latitude) - differenceCoords.latitude,
           longitude: fixToSixDemicalPoints(memoCoords.longitude) - differenceCoords.longitude,
           altitude: fixToSixDemicalPoints(memoCoords.altitude || 0) - differenceCoords.altitude,
+          direction: compassHeading.current,
         });
       },
       (error) => {

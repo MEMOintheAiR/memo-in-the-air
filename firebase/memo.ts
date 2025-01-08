@@ -6,6 +6,7 @@ type memoType = {
   latitude: number;
   longitude: number;
   altitude: number;
+  direction: number;
   content: string;
   createdAt: string;
   updatedAt: string;
@@ -18,6 +19,7 @@ export async function createMemo({
   latitude,
   longitude,
   altitude,
+  direction,
 }: {
   userId: string;
   memoId: string;
@@ -25,12 +27,14 @@ export async function createMemo({
   latitude: number;
   longitude: number;
   altitude: number | 0;
+  direction: number;
 }) {
   await set(ref(database as Database, `memo/${userId}/${memoId}`), {
     content,
     latitude,
     longitude,
     altitude,
+    direction,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
   });
@@ -47,6 +51,7 @@ export async function getMemoList(userId: string) {
       latitude: Number(value.latitude),
       longitude: Number(value.longitude),
       altitude: Number(value.altitude),
+      direction: Number(value.direction),
     });
   }
 
