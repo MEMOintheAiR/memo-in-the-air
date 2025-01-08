@@ -11,6 +11,8 @@ export interface UserSlice {
   setUserId: (userId: string | Promise<string>) => void;
   userLocation: locationType;
   setUserLocation: (userLocation: locationType) => void;
+  differenceCoords: locationType;
+  setDifferenceCoords: (differenceCoords: locationType) => void;
 }
 
 export const createUserSlice: StateCreator<UserSlice> = (set) => ({
@@ -29,5 +31,13 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
   },
   setUserLocation: (userLocation: locationType) => {
     set((state: UserSlice) => ({ ...state.userLocation, userLocation }));
+  },
+  differenceCoords: {
+    latitude: 0,
+    longitude: 0,
+    altitude: 0,
+  },
+  setDifferenceCoords: (differenceCoords: locationType) => {
+    set((state: UserSlice) => ({ ...state.differenceCoords, differenceCoords }));
   },
 });
