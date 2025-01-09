@@ -3,6 +3,6 @@ export function fixToSixDemicalPoints(num: number): number {
 }
 
 export function formatDate(date: string): string {
-  let newDate: string = new Date(date).toLocaleString("ko-KR", { timeZone: "UTC" });
+  let newDate: string = new Date(date).toLocaleString("ko-KR", { timeZone: "asia/seoul" });
   return newDate.slice(0, -3);
 }
