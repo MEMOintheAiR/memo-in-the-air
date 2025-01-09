@@ -144,7 +144,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "100%",
     height: "100%",
-    backgroundColor: "#668CFF",
+    backgroundColor: "#6CA0DC",
     textAlign: "center",
     justifyContent: "center",
     alignItems: "center",
@@ -153,5 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 27,
     fontFamily: "SUITE-Bold",
     color: "#FFFFFF",
+    margin: "auto",
   },
 });

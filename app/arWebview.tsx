@@ -214,7 +214,7 @@ export default function ARWebView() {
           <View style={styles.plusIconContainer}></View>
         ) : (
           <Pressable style={styles.plusIconContainer} onPress={handleClickPlusButton}>
-            <PlusSvg width="65%" height="65%" color="#6CA0DC" />
+            <PlusSvg width="70%" height="70%" color="#6CA0DC" />
           </Pressable>
         )}
 

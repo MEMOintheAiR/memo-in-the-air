@@ -55,14 +55,13 @@ const styles = StyleSheet.create({
   },
   start: {
     width: "85%",
-    height: 50,
+    height: 60,
     backgroundColor: "#FFFFFF",
     borderColor: "#6CA0DC",
-    borderWidth: 1,
-    borderRadius: 5,
+    borderWidth: 1.3,
+    borderRadius: 50,
   },
   startText: {
-    fontSize: 27,
     color: "#6CA0DC",
     fontSize: 27,
     fontFamily: "SUITE-Bold",

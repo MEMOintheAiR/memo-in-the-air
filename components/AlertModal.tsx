@@ -34,14 +34,13 @@ const styles = StyleSheet.create({
   modalBackgroundContainer: {
     flex: 1,
     backgroundColor: "#737373",
-    opacity: 0.85,
+    opacity: 0.9,
   },
   modalContainer: {
-    width: "75%",
-    height: "20%",
+    width: "80%",
+    height: "22%",
     margin: "auto",
     backgroundColor: "white",
-    borderRadius: 7,
   },
   modalTextContainer: {
     flex: 5,
@@ -55,11 +54,10 @@ const styles = StyleSheet.create({
     color: "#343A40",
   },
   modalButtonContainer: {
-    flex: 2,
-    width: "80%",
+    flex: 2.2,
+    width: "100%",
+    height: 17,
     margin: "auto",
-    marginBottom: 15,
-    borderRadius: 40,
     backgroundColor: "#5E8BCE",
   },
   modalButtonText: {
