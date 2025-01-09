@@ -144,6 +144,7 @@ export default function ARWebView() {
 
           const memo${index} = document.createElement("a-plane");
           memo${index}.setAttribute("id", "${memo.memoId}");
+          memo${index}.setAttribute("rotation", "0 ${memo.direction} 0");
           memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition}");
           memo${index}.setAttribute("material", "color: #FFFF4C;");
           memo${index}.setAttribute("width", "${memoSize}");
