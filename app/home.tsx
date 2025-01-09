@@ -62,10 +62,12 @@ const styles = StyleSheet.create({
     borderRadius: 5,
   },
   startText: {
-    fontSize: 25,
+    fontSize: 27,
     color: "#6CA0DC",
+    fontSize: 27,
+    fontFamily: "SUITE-Bold",
+    fontWeight: 900,
     textAlign: "center",
-    fontWeight: 700,
     margin: "auto",
   },
 });

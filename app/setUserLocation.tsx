@@ -130,7 +130,7 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 5,
     fontSize: 24,
-    fontWeight: 500,
+    fontFamily: "SUITE-Medium",
     color: "#343A40",
     textAlign: "center",
     margin: "auto",
@@ -150,8 +150,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontSize: 25,
-    fontWeight: 700,
+    fontSize: 27,
+    fontFamily: "SUITE-Bold",
     color: "#FFFFFF",
   },
 });

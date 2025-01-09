@@ -135,7 +135,7 @@ const styles = StyleSheet.create({
   headerTitle: {
     flex: 5,
     fontSize: 24,
-    fontWeight: 600,
+    fontFamily: "SUITE-Medium",
     color: "#343A40",
     textAlign: "center",
     margin: "auto",
@@ -166,7 +166,8 @@ const styles = StyleSheet.create({
   textInput: {
     justifyContent: "center",
     margin: "auto",
-    fontSize: 23,
+    fontSize: 25,
+    fontFamily: "SUITE-Medium",
   },
   bottomContainer: {
     flex: 1,
@@ -180,8 +181,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   buttonText: {
-    fontSize: 22,
+    fontSize: 27,
+    fontFamily: "SUITE-Bold",
     color: "#FFFFFF",
-    fontWeight: 600,
   },
 });

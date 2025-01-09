@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
   modalTextContainer: {
     flex: 5,
     textAlign: "center",
+    fontFamily: "SUITE-Regular",
     justifyContent: "center",
     alignItems: "center",
   },
@@ -63,8 +64,8 @@ const styles = StyleSheet.create({
   },
   modalButtonText: {
     color: "#FFFFFF",
-    fontSize: 20,
-    fontWeight: 500,
+    fontSize: 22,
+    fontFamily: "SUITE-SemiBold",
     textAlign: "center",
     margin: "auto",
   },

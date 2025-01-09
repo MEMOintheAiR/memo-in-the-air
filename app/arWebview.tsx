@@ -241,11 +241,13 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   homeText: {
+    fontFamily: "SUITE-Regular",
     fontSize: 15,
     marginTop: 8,
     color: "#343A40",
   },
   listText: {
+    fontFamily: "SUITE-Regular",
     fontSize: 15,
     marginTop: 10,
     color: "#343A40",

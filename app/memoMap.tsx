@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   headerText: {
     flex: 5,
     fontSize: 24,
-    fontWeight: 500,
+    fontFamily: "SUITE-Medium",
     color: "#343A40",
     textAlign: "center",
     margin: "auto",
@@ -169,12 +169,12 @@ const styles = StyleSheet.create({
   },
   modalHeaderText: {
     flex: 7,
-    fontSize: 21,
-    fontWeight: 500,
+    fontSize: 22,
+    fontFamily: "SUITE-Regular",
     textAlign: "center",
   },
   addressText: {
-    fontWeight: 700,
+    fontFamily: "SUITE-Bold",
   },
   flatListContainer: {
     width: "100%",
@@ -193,12 +193,14 @@ const styles = StyleSheet.create({
   memoText: {
     color: "#343A40",
     fontSize: 18,
+    fontFamily: "SUITE-SemiBold",
     textAlign: "center",
     margin: "auto",
   },
   dateText: {
     color: "#5B5B5B",
     fontSize: 15,
+    fontFamily: "SUITE-Regular",
     textAlign: "center",
     marginTop: 5,
   },
