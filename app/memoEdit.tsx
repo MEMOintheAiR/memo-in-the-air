@@ -148,7 +148,7 @@ const styles = StyleSheet.create({
   headerButtonText: {
     fontSize: 24,
     fontWeight: 400,
-    color: "#6CA0DC",
+    color: "#5E8BCE",
     margin: "auto",
   },
   editViewContainer: {
