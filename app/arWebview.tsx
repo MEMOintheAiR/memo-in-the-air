@@ -8,7 +8,6 @@ import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
 import { router } from "expo-router";
-import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import CompassHeading from "react-native-compass-heading";
@@ -22,19 +21,36 @@ export default function ARWebView() {
   const userLocation = useBoundStore((state) => state.userLocation);
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
   const differenceCoords = useBoundStore((state) => state.differenceCoords);
+  const setDifferenceCoords = useBoundStore((state) => state.setDifferenceCoords);
 
   const webViewRef = useRef<WebView>(null);
   const compassHeading = useRef<number>(0);
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
+  const [changedPosition, setChangedPosition] = useState({
+    latitude: 0,
+    longitude: 0,
+    altitude: 0,
+  });
 
   useEffect(() => {
     getUserMemoList();
     subscribeCompass();
+    subscribePosition();
+    getDifferenceCoords();
 
     return () => {
       CompassHeading.stop();
+      Geolocation.stopObserving();
     };
   }, []);
+
+  useEffect(() => {
+    updateDevicePosition(
+      changedPosition.latitude - differenceCoords.latitude,
+      changedPosition.longitude - differenceCoords.longitude,
+      (changedPosition.altitude || 0) - differenceCoords.altitude,
+    );
+  }, [changedPosition]);
 
   async function getUserMemoList(): Promise<void> {
     const memoList = await getMemoList(userId);
@@ -47,25 +63,63 @@ export default function ARWebView() {
     });
   }
 
-  function updateDevicePosition(xPosition: number, yPosition: number, zPosition: number): void {
+  function getDifferenceCoords() {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        setDifferenceCoords({
+          latitude: position.coords.latitude - userLocation.latitude,
+          longitude: position.coords.longitude - userLocation.longitude,
+          altitude: (position.coords.altitude || 0) - userLocation.altitude,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, distanceFilter: 1 },
+    );
+  }
+
+  function subscribePosition(): void {
+    Geolocation.watchPosition(
+      (position) => {
+        setChangedPosition({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          altitude: position.coords.altitude || 0,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, distanceFilter: 0.1 },
+    );
+  }
+
+  function updateDevicePosition(
+    userLatitude: number,
+    userLongitude: number,
+    userAltitude: number,
+  ): void {
     let memoHtmlToUpdate = "";
     for (const memo of Object.values(memoList)) {
       const movingXPosition: number = fixToSixDemicalPoints(
-        setXPosition(userLocation.latitude, memo.latitude) - xPosition,
+        setXPosition(userLocation.latitude, memo.latitude) -
+          setXPosition(userLocation.latitude, userLatitude),
       );
       const movingYPosition: number = fixToSixDemicalPoints(
-        setYPosition(userLocation.altitude, memo.altitude) - yPosition,
+        setYPosition(userLocation.altitude, memo.altitude) -
+          setYPosition(userLocation.altitude, userAltitude),
       );
       const movingZPosition: number = fixToSixDemicalPoints(
-        setZPosition(userLocation.longitude, memo.longitude) + zPosition,
+        setZPosition(userLocation.longitude, memo.longitude) -
+          setZPosition(userLocation.longitude, userLongitude),
       );
-      const changedMemoSize: number =
-        movingZPosition < 5 ? Math.abs(1 * movingZPosition) : Math.abs(1 * movingZPosition) / 2;
 
       memoHtmlToUpdate += `
-        document.getElementById("${memo.memoId}").setAttribute("position", "${movingXPosition} ${movingYPosition} ${movingZPosition}");
-        document.getElementById("${memo.memoId}").setAttribute("width", "${changedMemoSize}");
-        document.getElementById("${memo.memoId}").setAttribute("height", "${changedMemoSize}");
+        if (document.getElementById("${memo.memoId}") !== null) {
+          document.getElementById("${memo.memoId}").position = "${movingXPosition} ${movingYPosition} ${movingZPosition}";
+        }
       `;
     }
     memoHtmlToUpdate += "true;";
@@ -145,7 +199,7 @@ export default function ARWebView() {
           const memo${index} = document.createElement("a-plane");
           memo${index}.setAttribute("id", "${memo.memoId}");
           memo${index}.setAttribute("rotation", "0 ${memo.direction} 0");
-          memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition}");
+          memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
           memo${index}.setAttribute("material", "color: #FFFF4C;");
           memo${index}.setAttribute("width", "${memoSize}");
           memo${index}.setAttribute("height", "${memoSize}");
