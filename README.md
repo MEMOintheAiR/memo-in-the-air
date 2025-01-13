@@ -17,22 +17,24 @@
 
 <!-- toc -->
 
-- [프로젝트를 기획하게 된 동기](#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%EB%A5%BC-%EA%B8%B0%ED%9A%8D%ED%95%98%EA%B2%8C-%EB%90%9C-%EB%8F%99%EA%B8%B0)
+- [프로젝트 기획 동기](#%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8-%EA%B8%B0%ED%9A%8D-%EB%8F%99%EA%B8%B0)
 - [AR(증강 현실)과 VR(가상 현실)의 차이점](#ar%EC%A6%9D%EA%B0%95-%ED%98%84%EC%8B%A4%EA%B3%BC-vr%EA%B0%80%EC%83%81-%ED%98%84%EC%8B%A4%EC%9D%98-%EC%B0%A8%EC%9D%B4%EC%A0%90)
 - [기술 스택](#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
 - [UI 미리보기](#ui-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0)
 - [구현 기능](#%EA%B5%AC%ED%98%84-%EA%B8%B0%EB%8A%A5)
-  - [1. 회원가입 하지 않고 메모 저장하기](#1-%ED%9A%8C%EC%9B%90%EA%B0%80%EC%9E%85-%ED%95%98%EC%A7%80-%EC%95%8A%EA%B3%A0-%EB%A9%94%EB%AA%A8-%EC%A0%80%EC%9E%A5%ED%95%98%EA%B8%B0)
-    - [1-1. 다른 사용자와 구별할 수 있는 사용자 만의 고유한 정보 파악하기](#1-1-%EB%8B%A4%EB%A5%B8-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80-%EA%B5%AC%EB%B3%84%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%82%AC%EC%9A%A9%EC%9E%90-%EB%A7%8C%EC%9D%98-%EA%B3%A0%EC%9C%A0%ED%95%9C-%EC%A0%95%EB%B3%B4-%ED%8C%8C%EC%95%85%ED%95%98%EA%B8%B0)
-    - [1-2. 사용자의 정보를 기억하기 위한 방법 : `expo-secure-store`](#1-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EA%B8%B0%EC%96%B5%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EB%B0%A9%EB%B2%95--expo-secure-store)
-  - [2. 지도를 활용하여 메모 목록 구현하기](#2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D-%EA%B5%AC%ED%98%84%ED%95%98%EA%B8%B0)
-    - [2-1. 마커 클러스터링(marker-clustering)이란?](#2-1-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81marker-clustering%EC%9D%B4%EB%9E%80)
-    - [2-2. 지도를 활용하여 메모 목록의 상세 정보 보여주기](#2-2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D%EC%9D%98-%EC%83%81%EC%84%B8-%EC%A0%95%EB%B3%B4-%EB%B3%B4%EC%97%AC%EC%A3%BC%EA%B8%B0)
+  * [1. 비회원 서비스 기반의 애플리케이션 설계와 구현](#1-%EB%B9%84%ED%9A%8C%EC%9B%90-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B8%B0%EB%B0%98%EC%9D%98-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%84%A4%EA%B3%84%EC%99%80-%EA%B5%AC%ED%98%84)
+    + [1-1. 다른 사용자와 구별할 수 있는 사용자 만의 고유한 정보 파악하기](#1-1-%EB%8B%A4%EB%A5%B8-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80-%EA%B5%AC%EB%B3%84%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%82%AC%EC%9A%A9%EC%9E%90-%EB%A7%8C%EC%9D%98-%EA%B3%A0%EC%9C%A0%ED%95%9C-%EC%A0%95%EB%B3%B4-%ED%8C%8C%EC%95%85%ED%95%98%EA%B8%B0)
+    + [1-2. 사용자의 정보를 기억하기 위한 방법 : `expo-secure-store`](#1-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EA%B8%B0%EC%96%B5%ED%95%98%EA%B8%B0-%EC%9C%84%ED%95%9C-%EB%B0%A9%EB%B2%95--expo-secure-store)
+  * [2. 지도를 활용한 직관적인 메모 목록 구현](#2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%A7%81%EA%B4%80%EC%A0%81%EC%9D%B8-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D-%EA%B5%AC%ED%98%84)
+    + [2-1. 마커 클러스터링(marker-clustering)이란?](#2-1-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81marker-clustering%EC%9D%B4%EB%9E%80)
+    + [2-2. 지도를 활용하여 메모 목록의 상세 정보 보여주기](#2-2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D%EC%9D%98-%EC%83%81%EC%84%B8-%EC%A0%95%EB%B3%B4-%EB%B3%B4%EC%97%AC%EC%A3%BC%EA%B8%B0)
 - [문제 해결](#%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
-  - [1. AR 적용을 위한 라이브러리 : `react-viro` vs `AR.js`](#1-ar-%EC%A0%81%EC%9A%A9%EC%9D%84-%EC%9C%84%ED%95%9C-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC--react-viro-vs-arjs)
-  - [2. 사용자의 위치를 설정하는 화면 추가](#2-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%9C%84%EC%B9%98%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8A%94-%ED%99%94%EB%A9%B4-%EC%B6%94%EA%B0%80)
-    - [2-1. 동일한 장소에서 사용자의 위치가 매번 다르게 반환되는 이유](#2-1-%EB%8F%99%EC%9D%BC%ED%95%9C-%EC%9E%A5%EC%86%8C%EC%97%90%EC%84%9C-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%9C%84%EC%B9%98%EA%B0%80-%EB%A7%A4%EB%B2%88-%EB%8B%A4%EB%A5%B4%EA%B2%8C-%EB%B0%98%ED%99%98%EB%90%98%EB%8A%94-%EC%9D%B4%EC%9C%A0)
-    - [2-2. 사용자가 직접 자신의 위치를 설정하도록 하여 위치 정확도를 높이자.](#2-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EC%A7%81%EC%A0%91-%EC%9E%90%EC%8B%A0%EC%9D%98-%EC%9C%84%EC%B9%98%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8F%84%EB%A1%9D-%ED%95%98%EC%97%AC-%EC%9C%84%EC%B9%98-%EC%A0%95%ED%99%95%EB%8F%84%EB%A5%BC-%EB%86%92%EC%9D%B4%EC%9E%90)
+  * [1. AR 구현 라이브러리의 변경 : `react-viro` 에서 `AR.js` 로](#1-ar-%EA%B5%AC%ED%98%84-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EC%9D%98-%EB%B3%80%EA%B2%BD--react-viro-%EC%97%90%EC%84%9C-arjs-%EB%A1%9C)
+    + [1-1. `react-viro`를 선택했던 이유와 치명적인 문제 발생](#1-1-react-viro%EB%A5%BC-%EC%84%A0%ED%83%9D%ED%96%88%EB%8D%98-%EC%9D%B4%EC%9C%A0%EC%99%80-%EC%B9%98%EB%AA%85%EC%A0%81%EC%9D%B8-%EB%AC%B8%EC%A0%9C-%EB%B0%9C%EC%83%9D)
+    + [1-2. 새로운 대안으로 웹 기반 라이브러리인 `AR.js` 채택](#1-2-%EC%83%88%EB%A1%9C%EC%9A%B4-%EB%8C%80%EC%95%88%EC%9C%BC%EB%A1%9C-%EC%9B%B9-%EA%B8%B0%EB%B0%98-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EC%9D%B8-arjs-%EC%B1%84%ED%83%9D)
+  * [2. 동일한 위치에서 AR 화면 내 메모가 보였다 사라지는 문제가 발생하는 이유는?](#2-%EB%8F%99%EC%9D%BC%ED%95%9C-%EC%9C%84%EC%B9%98%EC%97%90%EC%84%9C-ar-%ED%99%94%EB%A9%B4-%EB%82%B4-%EB%A9%94%EB%AA%A8%EA%B0%80-%EB%B3%B4%EC%98%80%EB%8B%A4-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0%EB%8A%94)
+    + [2-1. 사용자의 위치가 매번 다르게 반환되는 이유](#2-1-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%9C%84%EC%B9%98%EA%B0%80-%EB%A7%A4%EB%B2%88-%EB%8B%A4%EB%A5%B4%EA%B2%8C-%EB%B0%98%ED%99%98%EB%90%98%EB%8A%94-%EC%9D%B4%EC%9C%A0)
+    + [2-2. 사용자가 직접 자신의 위치를 설정하도록 하여 위치 정확도를 높이자.](#2-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EC%A7%81%EC%A0%91-%EC%9E%90%EC%8B%A0%EC%9D%98-%EC%9C%84%EC%B9%98%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8F%84%EB%A1%9D-%ED%95%98%EC%97%AC-%EC%9C%84%EC%B9%98-%EC%A0%95%ED%99%95%EB%8F%84%EB%A5%BC-%EB%86%92%EC%9D%B4%EC%9E%90)
 
 <!-- tocstop -->
 
@@ -121,7 +123,7 @@
 
 # 구현 기능
 
-## 1. 회원가입 하지 않고 메모 저장하기
+## 1. 비회원 서비스 기반의 애플리케이션 설계와 구현
 
 `UUID`와 `expo-secure-store`를 활용하여 회원가입 없이도 서비스를 이용할 수 있도록 했습니다.
 
@@ -185,7 +187,7 @@ React Native 앱에서는 디바이스의 정보를 파악할 수 있는 `expo-d
 
 <br>
 
-## 2. 지도를 활용하여 메모 목록 구현하기
+## 2. 지도를 활용한 직관적인 메모 목록 구현
 
 이 서비스는 장소 기반 메모 애플리케이션이므로, 메모를 단순히 정렬해 보여주는 대신 지도 위에 표시하는 방식이 더 직관적이라고 판단되어 지도를 사용하였습니다. 그리고 마커 클러스터링(marker-clustering)을 통해 비슷한 위치에 등록된 메모의 수를 쉽게 파악할 수 있도록 구현하였습니다.
 
@@ -237,41 +239,58 @@ React Native 앱에서는 디바이스의 정보를 파악할 수 있는 `expo-d
 
 # 문제 해결
 
-## 1. AR 적용을 위한 라이브러리 : `react-viro` vs `AR.js`
+## 1. AR 구현 라이브러리의 변경 : `react-viro` 에서 `AR.js` 로
 
-AR.js는 웹에서 AR를 구현할 수 있는 JavaScript 웹 라이브러리로, React Native에서 WebView를 사용하여 AR을 구현했습니다.
+### 1-1. `react-viro`를 선택했던 이유와 치명적인 문제 발생
 
-프로젝트 초기 단계인 PoC(Proof of Concept)에서 아래와 같은 이유로 'react-viro' 라이브러리를 선택하여 구현 가능성을 검토했습니다.
+프로젝트 초반 PoC(Proof of Concept) 단계에서 다음과 같은 이유로 'react-viro' 라이브러리를 선택하게 되었습니다.
 
 1. React Native 라이브러리로, 설치 이외의 추가적인 작업이 필요하지 않다.
-2. AR 환경에서 텍스트나 도형 등의 물체를 자유롭게 수정 및 변형이 가능하며, 원하는 좌표에 물체를 위치시킬 수 있는 기능을 지원한다.
+2. AR 환경에서 텍스트나 도형 등 가상의 물체를 자유롭게 수정 및 변형이 가능하며, 원하는 좌표에 물체를 위치시킬 수 있는 기능을 지원한다.
 
-`react-viro`를 사용하여 구현 가능성을 확인했기에 구현 단계에서도 해당 라이브러리를 사용했습니다. `react-viro`를 사용하여 AR 화면을 띄우고 메모 위치를 보여주는 그리드를 구현하는 데 성공했으나, 다음 단계인 메모 등록 화면 기능을 추가하며 문제가 발생했습니다. AR 화면에서 메모 등록 화면으로 이동 시 앱이 강제 종료되는 현상이 확인되었습니다.
+`react-viro`는 초기 구현과 AR 화면에서 메모 위치를 표시하는 기능을 구현할 당시에는 적절한 선택이라고 생각했습니다. 그러나 메모 등록 화면 기능을 구현하면서 문제가 발생했습니다. AR 화면에서 메모 등록 화면으로 이동하면 앱이 <b>강제 종료</b>되는 현상이 확인되었습니다.
 
 문제를 해결하기 위해 다음과 같은 사항들을 확인했습니다.
 
-1. Router의 문제 여부
+1. Router 문제 <br>
+   : AR 화면 이외 다른 화면들 간의 이동은 정상적으로 동작했습니다.
 
-- AR 화면 외 다른 화면들 간의 이동은 정상적으로 동작했습니다.
+2. 라이브러리 GitHub 이슈 확인 <br>
+   : 라이브러리의 GitHub에 동일한 이슈를 등록되어 있으나, 해결책에 대한 답변은 없었습니다.
 
-2. 라이브러리 GitHub 이슈 확인
+3. 라이브러리 버전 다운그레이드 <br>
+   : 라이브러리의 버전을 낮춰 테스트를 진행했으나 동일한 문제는 재현되었습니다.
 
-- 라이브러리의 GitHub 페이지에서 동일한 이슈를 발견했으나, 해결책에 대해선 답변이 없었습니다.
+결론적으로, `react-viro` 라이브러리 자체 문제로 판단되었으며 해당 라이브러리의 문제를 해결할 시간이 부족했던 상황이었기에 검토했던 대안들 중 하나였던 웹 기반 라이브러리인 AR.js를 선택하게 되었습니다.
 
-3. 라이브러리 버전 다운그레이드
+### 1-2. 새로운 대안으로 웹 기반 라이브러리인 `AR.js` 채택
 
-- 라이브러리의 버전을 낮춰 테스트를 진행했으나 동일한 문제가 발생했습니다.
+React Native의 다른 AR 라이브러리를 검토했으나 적합하지 않다고 판단되어, 웹에서 AR를 구현할 수 있는 라이브러리인 `AR.js`를 선택했습니다. 웹 AR 라이브러리이기 때문에 WebView를 기반으로 하여 AR 구현 테스트를 진행했습니다.
 
-`react-viro` 라이브러리 자체 문제로 판단되었고 프로젝트 마무리까지 일주일밖에 남지 않은 상황이었기 때문에 라이브러리의 문제를 해결하는 데에 시간을 쓰는 것보단 새로운 방안을 찾아야 했습니다. React Native의 다른 AR 라이브러리는 이미 PoC 단계에서 확인했었기에 웹 AR 라이브러리인 `AR.js`를 사용하는 것으로 선택했습니다.
+> WebView는 네이티브 화면에서 웹 컨텐츠를 렌더링하는 컴포넌트로, 웹 컨텐츠을 앱 화면과 함께 사용자에게 보여줄 수 있다.
 
-AR 환경을 구현하기 위해선 카메라를 사용해야 하는데 WebView에서 AR 웹 애플리케이션의 HTTPS 주소를 요구한다는 것을 확인했습니다. 따라서, 프로젝트 생성 후 `AR.js`의 테스트 코드로 먼저 배포하여 동작 여부를 확인했습니다. 테스트한 결과,
-WebView 내에서 AR 화면이 정상적으로 실행되며, 페이지 간의 이동 또한 정상적으로 이루어졌습니다. 이에 따라 `AR.js` 라이브러리를 사용하여 프로젝트를 진행했습니다.
+AR.js의 샘플 코드를 HTTPS 환경으로 배포한 후 WebView를 통해 테스트를 진행했고, 다음과 같은 결과를 확인할 수 있었습니다.
+
+- WebView 내부에서 AR 화면이 정상적으로 동작한다.
+- AR 화면 간의 페이지 이동과 관련된 문제가 발생하지 않는다.
+
+이와 같은 결과를 바탕으로 AR.js 라이브러리를 채택하여 프로젝트를 원활하게 이어서 진행할 수 있게 되었습니다.
 
 <br>
 
-## 2. 사용자의 위치를 설정하는 화면 추가
+## 2. 동일한 위치에서 AR 화면 내 메모가 보였다 사라지는 문제가 발생하는 이유는?
 
-### 2-1. 동일한 장소에서 사용자의 위치가 매번 다르게 반환되는 이유
+AR 화면 내 메모를 띄우는 기능을 구현한 후, 여러 번의 테스트를 진행하면서 동일한 위치에서도 메모의 위치가 변하거나 보이지 않는 현상이 발생했습니다. 이는 AR 화면 실행 전 사용자의 현재 위치를 파악하는 과정에서 매번 다른 좌표값이 반환되는 것을 파악하게 되었습니다.
+<br>
+
+<details>
+  <summary>AR 화면을 실행할 때마다 메모의 위치가 달라지는 실제 화면 예시</summary>
+  <div markdown="1">
+    <img src="./assets/images/docs/memoLocationDiff.png" alt="memoLocationDiff" width"100%" />
+  </div>
+</details>
+
+### 2-1. 사용자의 위치가 매번 다르게 반환되는 이유
 
 실내 환경에서는 GPS 신호가 건물 구조물에 의해 차단되거나 굴절되며 정확한 신호 수신이 파악되지 않아, 사용자의 위치가 매번 다르게 반환됩니다.
 
@@ -279,9 +298,9 @@ WebView 내에서 AR 화면이 정상적으로 실행되며, 페이지 간의 �
 
 `expo-location` 라이브러리를 사용하여 테스트한 결과, 같은 위치에서 5번 연속 사용자의 위치를 측정한 데이터를 구글 지도에 표시했을 때, 좌표 간의 거리가 최대 <b>약 8.3m</b> 정도 차이나며, 실제 위치와 측정된 좌표 간의 거리는 최대 <b>약 22m</b> 정도 차이 나는 것을 확인했습니다.
 
-GPS의 정확도에 관한 문제를 직접 해결할 수 없기 때문에, 기획 측면에서 해당 문제를 보완할 수 없을까 생각하게 되었습니다.
+GPS의 정확도 문제를 개선하는 데 한계가 있기 때문에, 이를 기획적으로 보완할 방법을 고민했습니다.
 
-<img src="./assets/images/docs/userLocation.png" alt="userLocation" width="70%">
+<img src="./assets/images/docs/userLocation.png" alt="userLocation" width="80%">
 <br>
 
 ### 2-2. 사용자가 직접 자신의 위치를 설정하도록 하여 위치 정확도를 높이자.
@@ -296,13 +315,13 @@ API를 통해 파악한 사용자의 위치가 지도에 표시되고, 해당 �
 
 <br>
 
-<table width="50%">
+<table>
   <tr>
     <th>해당 화면 동작 미리보기</th>
   </tr>
   <tr>
     <td>
-      <img src="./assets/images/docs/setUserLocationGif.gif" alt="setUserLocation" />
+      <img src="./assets/images/docs/setUserLocationGif.gif" alt="setUserLocation" width="250"/>
     </td>
   </tr>
 </table>
