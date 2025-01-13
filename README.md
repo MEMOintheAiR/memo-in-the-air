@@ -352,20 +352,14 @@ AR.js 라이브러리는 가상의 물체를 띄우기 위해 카메라를 기�
     <td width="70%">
 
 ```jsx
-<a-box
-  color="red"
-  gps-new-entity-place="latitude: 37.5666826; longitude: 126.9784045"
-></a-box>
+<a-box color="red" gps-new-entity-place="latitude: 37.5666826; longitude: 126.9784045"></a-box>
 ```
 
   </td>
   <td width="30%">
 
 ```jsx
-<a-box
-  color="red"
-  position="-1 0.5 -3"
-></a-box>
+<a-box color="red" position="-1 0.5 -3"></a-box>
 ```
 
   </td>
