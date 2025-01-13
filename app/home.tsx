@@ -1,24 +1,23 @@
 import Button from "@/components/Button";
-import { LOGIN_BUTTON, START_BUTTON } from "@/constants/Buttons";
+import { START_BUTTON } from "@/constants/Buttons";
 import { router } from "expo-router";
 import { Image, SafeAreaView, StyleSheet, View } from "react-native";
 
 export default function home() {
   function handleMoveToAR() {
-    router.push("/loading");
+    router.push("/setUserLocation");
   }
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
-          source={require("../assets/images/logo.png")}
+          source={require("../assets/images/logo-vertical.png")}
           style={styles.image}
           resizeMode="contain"
         />
       </View>
       <View style={styles.buttonContainer}>
-        <Button buttonText={LOGIN_BUTTON} style={styles.login} textStyle={styles.loginText} />
         <Button
           buttonText={START_BUTTON}
           style={styles.start}
@@ -36,54 +35,37 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
+    backgroundColor: "#F9F4D9",
   },
   imageContainer: {
-    flex: 6,
+    flex: 7,
   },
   image: {
     flex: 1,
-    transform: [{ scale: 0.9 }],
+    transform: [{ scale: 1 }],
     alignItems: "center",
     justifyContent: "flex-end",
   },
   buttonContainer: {
-    flex: 2,
+    flex: 1,
     width: "100%",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
     alignItems: "center",
   },
-  login: {
-    width: "60%",
-    height: 50,
-    backgroundColor: "#6CA0DC",
-    borderColor: "#6CA0DC",
-    borderWidth: 2,
-    borderRadius: 20,
-    marginBottom: 10,
-  },
-  loginText: {
-    flex: 1,
-    fontSize: 24,
-    color: "#FFFFFF",
-    textAlign: "center",
-    fontWeight: 700,
-    paddingVertical: 10,
-  },
   start: {
-    width: "60%",
-    height: 50,
-    backgroundColor: "#FFFFFF",
-    borderColor: "#6CA0DC",
-    borderWidth: 2,
-    borderRadius: 20,
+    width: "85%",
+    height: 60,
+    backgroundColor: "#5E8BCE",
+    borderColor: "#5E8BCE",
+    borderWidth: 1.3,
+    borderRadius: 50,
   },
   startText: {
-    flex: 1,
-    fontSize: 23,
-    color: "#6CA0DC",
+    color: "#FFFFFF",
+    fontSize: 27,
+    fontFamily: "SUITE-Bold",
     textAlign: "center",
-    fontWeight: 700,
-    paddingVertical: 10,
+    margin: "auto",
   },
 });

@@ -4,6 +4,7 @@ type locationType = {
   latitude: number;
   longitude: number;
   altitude: number;
+  direction: number;
 };
 
 type memoType = {
@@ -11,6 +12,7 @@ type memoType = {
   latitude: number;
   longitude: number;
   altitude: number;
+  direction: number;
   content: string;
   createdAt: string;
   updatedAt: string;
@@ -20,7 +22,7 @@ export interface MemoSlice {
   memoList: memoType[];
   setMemoList: (memoList: memoType[] | Promise<memoType[]>) => void;
   memoLocation: locationType;
-  setMemoLocation: ({ latitude, longitude, altitude }: locationType) => void;
+  setMemoLocation: ({ latitude, longitude, altitude, direction }: locationType) => void;
 }
 
 export const createMemoSlice: StateCreator<MemoSlice> = (set) => ({
@@ -32,6 +34,7 @@ export const createMemoSlice: StateCreator<MemoSlice> = (set) => ({
     latitude: 0,
     longitude: 0,
     altitude: 0,
+    direction: 0,
   },
   setMemoLocation: (memoLocation) => {
     set((state: MemoSlice) => ({ ...state.memoLocation, memoLocation }));

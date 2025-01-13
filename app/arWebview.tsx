@@ -1,64 +1,125 @@
 import HomeSvg from "@/assets/images/home.svg";
-import MemoListSvg from "@/assets/images/memoList.svg";
+import MapMarkerSvg from "@/assets/images/mapMarker.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
+import { COMPASS_UPDATE_RATE } from "@/constants/Variable";
+import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
-import * as Location from "expo-location";
 import { router } from "expo-router";
-import { DeviceMotion, DeviceMotionMeasurement } from "expo-sensors";
 import { useEffect, useRef, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
+import CompassHeading from "react-native-compass-heading";
+import Geolocation from "react-native-geolocation-service";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
 export default function ARWebView() {
+  const userId = useBoundStore((state) => state.userId);
   const memoList = useBoundStore((state) => state.memoList);
+  const setMemoList = useBoundStore((state) => state.setMemoList);
   const userLocation = useBoundStore((state) => state.userLocation);
   const setMemoLocation = useBoundStore((state) => state.setMemoLocation);
+  const differenceCoords = useBoundStore((state) => state.differenceCoords);
+  const setDifferenceCoords = useBoundStore((state) => state.setDifferenceCoords);
 
   const webViewRef = useRef<WebView>(null);
+  const compassHeading = useRef<number>(0);
   const [isGridVisible, setIsGridVisible] = useState<boolean>(false);
+  const [changedPosition, setChangedPosition] = useState({
+    latitude: 0,
+    longitude: 0,
+    altitude: 0,
+  });
 
   useEffect(() => {
-    watchUserChangedLocation();
+    getUserMemoList();
+    subscribeCompass();
+    subscribePosition();
+    getDifferenceCoords();
 
     return () => {
-      DeviceMotion.removeAllListeners();
+      CompassHeading.stop();
+      Geolocation.stopObserving();
     };
   }, []);
 
-  function watchUserChangedLocation() {
-    DeviceMotion.setUpdateInterval(100);
+  useEffect(() => {
+    updateDevicePosition(
+      changedPosition.latitude - differenceCoords.latitude,
+      changedPosition.longitude - differenceCoords.longitude,
+      (changedPosition.altitude || 0) - differenceCoords.altitude,
+    );
+  }, [changedPosition]);
 
-    DeviceMotion.addListener((deviceSensor: DeviceMotionMeasurement) => {
-      updateDevicePosition(
-        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.x),
-        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.y),
-        fixToSixDemicalPoints(deviceSensor.accelerationIncludingGravity.z),
-      );
+  async function getUserMemoList(): Promise<void> {
+    const memoList = await getMemoList(userId);
+    setMemoList(memoList || []);
+  }
+
+  function subscribeCompass(): void {
+    CompassHeading.start(COMPASS_UPDATE_RATE, ({ heading }: { heading: string }) => {
+      compassHeading.current = Number(heading);
     });
   }
 
-  function updateDevicePosition(xPosition: number, yPosition: number, zPosition: number): void {
+  function getDifferenceCoords() {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        console.log(position);
+        setDifferenceCoords({
+          latitude: position.coords.latitude - userLocation.latitude,
+          longitude: position.coords.longitude - userLocation.longitude,
+          altitude: (position.coords.altitude || 0) - userLocation.altitude,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, distanceFilter: 1 },
+    );
+  }
+
+  function subscribePosition(): void {
+    Geolocation.watchPosition(
+      (position) => {
+        setChangedPosition({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+          altitude: position.coords.altitude || 0,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, distanceFilter: 0.1 },
+    );
+  }
+
+  function updateDevicePosition(
+    userLatitude: number,
+    userLongitude: number,
+    userAltitude: number,
+  ): void {
     let memoHtmlToUpdate = "";
     for (const memo of Object.values(memoList)) {
       const movingXPosition: number = fixToSixDemicalPoints(
-        setXPosition(userLocation.latitude, memo.latitude) - xPosition,
+        setXPosition(userLocation.latitude, memo.latitude) -
+          setXPosition(userLocation.latitude, userLatitude),
       );
       const movingYPosition: number = fixToSixDemicalPoints(
-        setYPosition(userLocation.altitude, memo.altitude) - yPosition,
+        setYPosition(userLocation.altitude, memo.altitude) -
+          setYPosition(userLocation.altitude, userAltitude),
       );
       const movingZPosition: number = fixToSixDemicalPoints(
-        setZPosition(userLocation.longitude, memo.longitude) + zPosition,
+        setZPosition(userLocation.longitude, memo.longitude) -
+          setZPosition(userLocation.longitude, userLongitude),
       );
-      const changedMemoSize: number =
-        movingZPosition < 5 ? Math.abs(1 * movingZPosition) : Math.abs(1 * movingZPosition) / 2;
 
       memoHtmlToUpdate += `
-        document.getElementById("${memo.memoId}").setAttribute("position", "${movingXPosition} ${movingYPosition} ${movingZPosition}");
-        document.getElementById("${memo.memoId}").setAttribute("width", "${changedMemoSize}");
-        document.getElementById("${memo.memoId}").setAttribute("height", "${changedMemoSize}");
+        if (document.getElementById("${memo.memoId}") !== null) {
+          document.getElementById("${memo.memoId}").position = "${movingXPosition} ${movingYPosition} ${movingZPosition}";
+        }
       `;
     }
     memoHtmlToUpdate += "true;";
@@ -66,21 +127,27 @@ export default function ARWebView() {
     webViewRef.current?.injectJavaScript(memoHtmlToUpdate);
   }
 
-  async function getMemoCurrentLocation(): Promise<void> {
-    const { coords } = await Location.getCurrentPositionAsync();
-
-    if (coords) {
-      setMemoLocation({
-        latitude: fixToSixDemicalPoints(coords.latitude),
-        longitude: fixToSixDemicalPoints(coords.longitude),
-        altitude: fixToSixDemicalPoints(coords.altitude || 0),
-      });
-    }
+  function getMemoCurrentLocation(): void {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const memoCoords = position.coords;
+        setMemoLocation({
+          latitude: fixToSixDemicalPoints(memoCoords.latitude) - differenceCoords.latitude,
+          longitude: fixToSixDemicalPoints(memoCoords.longitude) - differenceCoords.longitude,
+          altitude: fixToSixDemicalPoints(memoCoords.altitude || 0) - differenceCoords.altitude,
+          direction: compassHeading.current,
+        });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+    );
   }
 
-  async function handleWebViewMessage(event: WebViewMessageEvent): Promise<void> {
+  function handleWebViewMessage(event: WebViewMessageEvent): void {
     const type: string = event.nativeEvent.data;
-    await getMemoCurrentLocation();
+    getMemoCurrentLocation();
 
     if (type === "grid-click") {
       router.push("/memoEdit");
@@ -88,7 +155,12 @@ export default function ARWebView() {
   }
 
   function handleMoveToHome(): void {
-    router.back();
+    router.dismissAll();
+    router.push("/home");
+  }
+
+  function handleMoveToMemoList(): void {
+    router.push("/memoMap");
   }
 
   function putMemoList(): string | undefined {
@@ -108,29 +180,35 @@ export default function ARWebView() {
       const xPosition: number = setXPosition(userLocation.latitude, memo.latitude);
       const yPosition: number = setYPosition(userLocation.altitude, memo.altitude);
       const zPosition: number = setZPosition(userLocation.longitude, memo.longitude);
-      const memoSize = zPosition < 5 ? Math.abs(1 * zPosition) : Math.abs(1 * zPosition) / 2;
+      const memoSize =
+        Math.abs(Number(zPosition.toFixed(0))) === 0
+          ? 2.5
+          : 2 + Math.abs(Number(zPosition.toFixed(0))) * 0.5;
 
-      memoHtmlToAdd += `
-        const memoText${index} = document.createElement("a-entity");
-        memoText${index}.setAttribute("text", {
-          value: "${memo.content}",
-          color: "#000000",
-          align: "center",
-        });
-        memoText${index}.setAttribute("position", "0 0 0.001");
-        memoText${index}.setAttribute("scale", "${memoSize * 3} ${memoSize * 3} 0");
+      if (Math.abs(xPosition) <= 100 && Math.abs(yPosition) <= 100 && Math.abs(zPosition) <= 100) {
+        memoHtmlToAdd += `
+          const memoText${index} = document.createElement("a-entity");
+          memoText${index}.setAttribute("text", {
+            value: "${memo.content}",
+            color: "#000000",
+            align: "center",
+          });
+          memoText${index}.setAttribute("position", "0 0 0.001");
+          memoText${index}.setAttribute("scale", "${memoSize * 3} ${memoSize * 3} 0");
 
-        const memo${index} = document.createElement("a-plane");
-        memo${index}.setAttribute("id", "${memo.memoId}");
-        memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition}");
-        memo${index}.setAttribute("material", "color: #FFFF4C;");
-        memo${index}.setAttribute("width", "${memoSize}");
-        memo${index}.setAttribute("height", "${memoSize}");
+          const memo${index} = document.createElement("a-plane");
+          memo${index}.setAttribute("id", "${memo.memoId}");
+          memo${index}.setAttribute("rotation", "0 ${memo.direction} 0");
+          memo${index}.setAttribute("position", "${xPosition} ${yPosition} ${zPosition < 0 ? zPosition : -zPosition}");
+          memo${index}.setAttribute("material", "color: #FFFF4C;");
+          memo${index}.setAttribute("width", "${memoSize}");
+          memo${index}.setAttribute("height", "${memoSize}");
 
-        memo${index}.appendChild(memoText${index});
-        document.getElementById("aScene")?.appendChild(memo${index});
-      `;
-      index++;
+          memo${index}.appendChild(memoText${index});
+          document.getElementById("aScene")?.appendChild(memo${index});
+        `;
+        index++;
+      }
     }
     memoHtmlToAdd += " true;";
 
@@ -182,21 +260,21 @@ export default function ARWebView() {
 
       <View style={styles.bottomContainer}>
         <Pressable style={styles.iconContainer} onPress={handleMoveToHome}>
-          <HomeSvg width="30%" height="30%" color="#343A40" />
-          <Text style={styles.iconText}>{MAIN_PAGE}</Text>
+          <HomeSvg width="38%" height="38%" color="#343A40" />
+          <Text style={styles.homeText}>{MAIN_PAGE}</Text>
         </Pressable>
 
         {isGridVisible ? (
           <View style={styles.plusIconContainer}></View>
         ) : (
           <Pressable style={styles.plusIconContainer} onPress={handleClickPlusButton}>
-            <PlusSvg width="65%" height="65%" color="#6CA0DC" />
+            <PlusSvg width="70%" height="70%" color="#5E8BCE" />
           </Pressable>
         )}
 
-        <Pressable style={styles.iconContainer}>
-          <MemoListSvg width="30%" height="30%" color="#343A40" />
-          <Text style={styles.iconText}>{MEMO_LIST_PAGE}</Text>
+        <Pressable style={styles.iconContainer} onPress={handleMoveToMemoList}>
+          <MapMarkerSvg width="34%" height="34%" color="#343A40" />
+          <Text style={styles.listText}>{MEMO_LIST_PAGE}</Text>
         </Pressable>
       </View>
     </>
@@ -216,9 +294,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     marginTop: 10,
   },
-  iconText: {
+  homeText: {
+    fontFamily: "SUITE-Regular",
     fontSize: 15,
     marginTop: 8,
+    color: "#343A40",
+  },
+  listText: {
+    fontFamily: "SUITE-Regular",
+    fontSize: 15,
+    marginTop: 10,
     color: "#343A40",
   },
   plusIconContainer: {
