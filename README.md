@@ -22,23 +22,24 @@
 - [기술 스택](#%EA%B8%B0%EC%88%A0-%EC%8A%A4%ED%83%9D)
 - [UI 미리보기](#ui-%EB%AF%B8%EB%A6%AC%EB%B3%B4%EA%B8%B0)
 - [구현 기능](#%EA%B5%AC%ED%98%84-%EA%B8%B0%EB%8A%A5)
-  - [1. 비회원 서비스 기반의 애플리케이션 설계와 구현](#1-%EB%B9%84%ED%9A%8C%EC%9B%90-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B8%B0%EB%B0%98%EC%9D%98-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%84%A4%EA%B3%84%EC%99%80-%EA%B5%AC%ED%98%84)
-    - [1-1. 다른 사용자와 구별할 수 있는 사용자만의 고유한 정보 파악하기](#1-1-%EB%8B%A4%EB%A5%B8-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80-%EA%B5%AC%EB%B3%84%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%82%AC%EC%9A%A9%EC%9E%90%EB%A7%8C%EC%9D%98-%EA%B3%A0%EC%9C%A0%ED%95%9C-%EC%A0%95%EB%B3%B4-%ED%8C%8C%EC%95%85%ED%95%98%EA%B8%B0)
-    - [1-2. 사용자의 정보를 기억하는 방법 : `expo-secure-store`](#1-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EA%B8%B0%EC%96%B5%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95--expo-secure-store)
-  - [2. 지도를 활용한 직관적인 메모 목록 구현](#2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%A7%81%EA%B4%80%EC%A0%81%EC%9D%B8-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D-%EA%B5%AC%ED%98%84)
-    - [2-1. 마커 클러스터링(marker-clustering)이란?](#2-1-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81marker-clustering%EC%9D%B4%EB%9E%80)
-    - [2-2. 지도를 활용하여 메모 목록의 상세 정보 보여주기](#2-2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D%EC%9D%98-%EC%83%81%EC%84%B8-%EC%A0%95%EB%B3%B4-%EB%B3%B4%EC%97%AC%EC%A3%BC%EA%B8%B0)
+  * [1. 비회원 서비스 기반의 애플리케이션 설계와 구현](#1-%EB%B9%84%ED%9A%8C%EC%9B%90-%EC%84%9C%EB%B9%84%EC%8A%A4-%EA%B8%B0%EB%B0%98%EC%9D%98-%EC%95%A0%ED%94%8C%EB%A6%AC%EC%BC%80%EC%9D%B4%EC%85%98-%EC%84%A4%EA%B3%84%EC%99%80-%EA%B5%AC%ED%98%84)
+    + [1-1. 다른 사용자와 구별할 수 있는 사용자만의 고유한 정보 파악하기](#1-1-%EB%8B%A4%EB%A5%B8-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80-%EA%B5%AC%EB%B3%84%ED%95%A0-%EC%88%98-%EC%9E%88%EB%8A%94-%EC%82%AC%EC%9A%A9%EC%9E%90%EB%A7%8C%EC%9D%98-%EA%B3%A0%EC%9C%A0%ED%95%9C-%EC%A0%95%EB%B3%B4-%ED%8C%8C%EC%95%85%ED%95%98%EA%B8%B0)
+    + [1-2. 사용자의 정보를 기억하는 방법 : `expo-secure-store`](#1-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%A0%95%EB%B3%B4%EB%A5%BC-%EA%B8%B0%EC%96%B5%ED%95%98%EB%8A%94-%EB%B0%A9%EB%B2%95--expo-secure-store)
+  * [2. 지도를 활용한 직관적인 메모 목록 구현](#2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%9C-%EC%A7%81%EA%B4%80%EC%A0%81%EC%9D%B8-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D-%EA%B5%AC%ED%98%84)
+    + [2-1. 마커 클러스터링(marker-clustering)이란?](#2-1-%EB%A7%88%EC%BB%A4-%ED%81%B4%EB%9F%AC%EC%8A%A4%ED%84%B0%EB%A7%81marker-clustering%EC%9D%B4%EB%9E%80)
+    + [2-2. 지도를 활용하여 메모 목록의 상세 정보 보여주기](#2-2-%EC%A7%80%EB%8F%84%EB%A5%BC-%ED%99%9C%EC%9A%A9%ED%95%98%EC%97%AC-%EB%A9%94%EB%AA%A8-%EB%AA%A9%EB%A1%9D%EC%9D%98-%EC%83%81%EC%84%B8-%EC%A0%95%EB%B3%B4-%EB%B3%B4%EC%97%AC%EC%A3%BC%EA%B8%B0)
 - [문제 해결](#%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0)
-  - [1. AR 구현 라이브러리의 변경 : `react-viro` 에서 `AR.js` 로](#1-ar-%EA%B5%AC%ED%98%84-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EC%9D%98-%EB%B3%80%EA%B2%BD--react-viro-%EC%97%90%EC%84%9C-arjs-%EB%A1%9C)
-    - [1-1. `react-viro`를 선택했던 이유와 치명적인 문제 발생](#1-1-react-viro%EB%A5%BC-%EC%84%A0%ED%83%9D%ED%96%88%EB%8D%98-%EC%9D%B4%EC%9C%A0%EC%99%80-%EC%B9%98%EB%AA%85%EC%A0%81%EC%9D%B8-%EB%AC%B8%EC%A0%9C-%EB%B0%9C%EC%83%9D)
-    - [1-2. 새로운 대안으로 웹 기반 라이브러리인 `AR.js` 채택](#1-2-%EC%83%88%EB%A1%9C%EC%9A%B4-%EB%8C%80%EC%95%88%EC%9C%BC%EB%A1%9C-%EC%9B%B9-%EA%B8%B0%EB%B0%98-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EC%9D%B8-arjs-%EC%B1%84%ED%83%9D)
-  - [2. 같은 위치에서 AR 화면 내 메모가 보였다가 사라지는 문제가 발생하는 이유는?](#2-%EA%B0%99%EC%9D%80-%EC%9C%84%EC%B9%98%EC%97%90%EC%84%9C-ar-%ED%99%94%EB%A9%B4-%EB%82%B4-%EB%A9%94%EB%AA%A8%EA%B0%80-%EB%B3%B4%EC%98%80%EB%8B%A4%EA%B0%80-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0%EB%8A%94)
-    - [2-1. 사용자의 위치가 매번 다르게 반환되는 이유](#2-1-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%9C%84%EC%B9%98%EA%B0%80-%EB%A7%A4%EB%B2%88-%EB%8B%A4%EB%A5%B4%EA%B2%8C-%EB%B0%98%ED%99%98%EB%90%98%EB%8A%94-%EC%9D%B4%EC%9C%A0)
-    - [2-2. 사용자가 직접 자신의 위치를 설정하도록 하여 위치 정확도를 높이자.](#2-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EC%A7%81%EC%A0%91-%EC%9E%90%EC%8B%A0%EC%9D%98-%EC%9C%84%EC%B9%98%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8F%84%EB%A1%9D-%ED%95%98%EC%97%AC-%EC%9C%84%EC%B9%98-%EC%A0%95%ED%99%95%EB%8F%84%EB%A5%BC-%EB%86%92%EC%9D%B4%EC%9E%90)
+  * [1. AR 구현 라이브러리의 변경 : `react-viro` 에서 `AR.js` 로](#1-ar-%EA%B5%AC%ED%98%84-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EC%9D%98-%EB%B3%80%EA%B2%BD--react-viro-%EC%97%90%EC%84%9C-arjs-%EB%A1%9C)
+    + [1-1. `react-viro`를 선택했던 이유와 치명적인 문제 발생](#1-1-react-viro%EB%A5%BC-%EC%84%A0%ED%83%9D%ED%96%88%EB%8D%98-%EC%9D%B4%EC%9C%A0%EC%99%80-%EC%B9%98%EB%AA%85%EC%A0%81%EC%9D%B8-%EB%AC%B8%EC%A0%9C-%EB%B0%9C%EC%83%9D)
+    + [1-2. 새로운 대안으로 웹 기반 라이브러리인 `AR.js` 채택](#1-2-%EC%83%88%EB%A1%9C%EC%9A%B4-%EB%8C%80%EC%95%88%EC%9C%BC%EB%A1%9C-%EC%9B%B9-%EA%B8%B0%EB%B0%98-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC%EC%9D%B8-arjs-%EC%B1%84%ED%83%9D)
+  * [2. 같은 위치에서 AR 화면 내 메모가 보였다가 사라지는 문제가 발생하는 이유는?](#2-%EA%B0%99%EC%9D%80-%EC%9C%84%EC%B9%98%EC%97%90%EC%84%9C-ar-%ED%99%94%EB%A9%B4-%EB%82%B4-%EB%A9%94%EB%AA%A8%EA%B0%80-%EB%B3%B4%EC%98%80%EB%8B%A4%EA%B0%80-%EC%82%AC%EB%9D%BC%EC%A7%80%EB%8A%94-%EB%AC%B8%EC%A0%9C%EA%B0%80-%EB%B0%9C%EC%83%9D%ED%95%98%EB%8A%94-%EC%9D%B4%EC%9C%A0%EB%8A%94)
+    + [2-1. 사용자의 위치가 매번 다르게 반환되는 이유](#2-1-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%9D%98-%EC%9C%84%EC%B9%98%EA%B0%80-%EB%A7%A4%EB%B2%88-%EB%8B%A4%EB%A5%B4%EA%B2%8C-%EB%B0%98%ED%99%98%EB%90%98%EB%8A%94-%EC%9D%B4%EC%9C%A0)
+    + [2-2. 사용자가 직접 자신의 위치를 설정하도록 하여 위치 정확도를 높이자.](#2-2-%EC%82%AC%EC%9A%A9%EC%9E%90%EA%B0%80-%EC%A7%81%EC%A0%91-%EC%9E%90%EC%8B%A0%EC%9D%98-%EC%9C%84%EC%B9%98%EB%A5%BC-%EC%84%A4%EC%A0%95%ED%95%98%EB%8F%84%EB%A1%9D-%ED%95%98%EC%97%AC-%EC%9C%84%EC%B9%98-%EC%A0%95%ED%99%95%EB%8F%84%EB%A5%BC-%EB%86%92%EC%9D%B4%EC%9E%90)
 - [챌린지](#%EC%B1%8C%EB%A6%B0%EC%A7%80)
-  - [1. AR 화면을 통해 정확한 위치에 메모 띄우기](#1-ar-%ED%99%94%EB%A9%B4%EC%9D%84-%ED%86%B5%ED%95%B4-%EC%A0%95%ED%99%95%ED%95%9C-%EC%9C%84%EC%B9%98%EC%97%90-%EB%A9%94%EB%AA%A8-%EB%9D%84%EC%9A%B0%EA%B8%B0)
-    - [1-1. 사용자와 메모 간 거리 계산 과정에서의 시행착오](#1-1-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80-%EB%A9%94%EB%AA%A8-%EA%B0%84-%EA%B1%B0%EB%A6%AC-%EA%B3%84%EC%82%B0-%EA%B3%BC%EC%A0%95%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%9C%ED%96%89%EC%B0%A9%EC%98%A4)
-    - [1-2. 여전히 정확하지 않은 메모의 위치 문제](#1-2-%EC%97%AC%EC%A0%84%ED%9E%88-%EC%A0%95%ED%99%95%ED%95%98%EC%A7%80-%EC%95%8A%EC%9D%80-%EB%A9%94%EB%AA%A8%EC%9D%98-%EC%9C%84%EC%B9%98-%EB%AC%B8%EC%A0%9C)
+  * [1. AR 화면을 통해 정확한 위치에 메모 띄우기](#1-ar-%ED%99%94%EB%A9%B4%EC%9D%84-%ED%86%B5%ED%95%B4-%EC%A0%95%ED%99%95%ED%95%9C-%EC%9C%84%EC%B9%98%EC%97%90-%EB%A9%94%EB%AA%A8-%EB%9D%84%EC%9A%B0%EA%B8%B0)
+    + [1-1. 사용자와 메모 간 거리 계산 과정에서의 시행착오](#1-1-%EC%82%AC%EC%9A%A9%EC%9E%90%EC%99%80-%EB%A9%94%EB%AA%A8-%EA%B0%84-%EA%B1%B0%EB%A6%AC-%EA%B3%84%EC%82%B0-%EA%B3%BC%EC%A0%95%EC%97%90%EC%84%9C%EC%9D%98-%EC%8B%9C%ED%96%89%EC%B0%A9%EC%98%A4)
+    + [1-2. 여전히 정확하지 않은 메모의 위치 문제](#1-2-%EC%97%AC%EC%A0%84%ED%9E%88-%EC%A0%95%ED%99%95%ED%95%98%EC%A7%80-%EC%95%8A%EC%9D%80-%EB%A9%94%EB%AA%A8%EC%9D%98-%EC%9C%84%EC%B9%98-%EB%AC%B8%EC%A0%9C)
+- [회고](#%ED%9A%8C%EA%B3%A0)
 
 <!-- tocstop -->
 
@@ -350,19 +351,11 @@ AR.js 라이브러리는 가상의 물체를 띄우기 위해 카메라를 기�
   </tr>
   <tr>
     <td width="70%">
-
-```jsx
-<a-box color="red" gps-new-entity-place="latitude: 37.5666826; longitude: 126.9784045"></a-box>
-```
-
-  </td>
-  <td width="30%">
-
-```jsx
-<a-box color="red" position="-1 0.5 -3"></a-box>
-```
-
-  </td>
+      <img src="./assets/images/docs/code_1.png" alt="code1" />
+    </td>
+    <td width="30%">
+      <img src="./assets/images/docs/code_2.png" alt="code2" />
+    </td>
   </tr>
 </table>
 
@@ -420,3 +413,13 @@ AR.js 라이브러리는 가상의 물체를 띄우기 위해 카메라를 기�
 **앞으로의 개선 사항**
 
 현재까지는 사용자가 자신의 위치에 대한 정확도를 높일 수 있도록 구현하였으며, 두 위 경도를 사용하여 상대적 거리를 계산하는 식을 적용했습니다. 그러나 위치 데이터가 완전히 정확해진 것은 아니기에 메모를 등록할 당신의 주변 환경 등을 함께 저장하여, AR 화면에서 메모의 위치를 표시할 때 저장한 주변 환경을 참고할 수 있도록 하는 등의 추가적인 기능 구현을 시도해볼 예정입니다.
+
+<br>
+
+# 회고
+
+이번 개인 프로젝트를 시작하며 처음 접하는 React Native와 AR 기술을 공부하고 적용해야 한다는 점에서 부담이 컸습니다. 하지만 미리 걱정하기보다는 개발 과정에서 마주하는 문제를 하나씩 해결하는 데에 집중하자는 생각으로 시작했습니다.
+
+이전 팀 프로젝트에서는 팀원들과 문제에 대해 다양한 의견을 나누며 해결할 수 있었지만, 개인 프로젝트는 모든 결정을 스스로 내려야 한다는 점이 어려웠습니다. 마주한 문제에 대해 최선의 방법을 찾기 위해 다양한 방안들을 찾고, 시도한 결과들을 꼼꼼히 기록하며 해결 방법을 찾아 나갔습니다. 비록 모든 방안들로 문제가 해결되진 않았지만, 시도한 방법을 참고하며 다른 방법들을 시도할 수 있었고 오히려 이 방식으로 문제를 해결하는 시간을 단축시킬 수 있었습니다.
+
+이 프로젝트를 통해 스스로 문제를 정의하고 해결해 나가는 능력의 중요성을 배웠습니다. 앞으로도 이러한 태도로 새로운 기술과 도전을 적극적으로 마주하고 싶습니다.
