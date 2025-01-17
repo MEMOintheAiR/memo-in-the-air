@@ -241,6 +241,13 @@ React Native 앱에서는 디바이스의 정보를 파악할 수 있는 `expo-d
 
 이를 통해 사용자가 선택한 위치의 메모 정보를 확인하는 동시에 그 위치와 주변 장소를 쉽게 파악할 수 있도록 구현했습니다.
 
+<details>
+  <summary>메모 목록에서 모달을 적용한 메모 상세 정보 화면</summary>
+  <div markdown="1">
+    <img width="30%" src="./assets/images/docs/map-modal.png" alt="map-modal">
+  </div>
+</details>
+
 <br>
 
 # 문제 해결
