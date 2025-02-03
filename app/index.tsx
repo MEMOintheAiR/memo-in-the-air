@@ -1,4 +1,4 @@
-import Home from "./home";
+import SignIn from "./signIn";
 import { useBoundStore } from "@/store/useBoundStore";
 import { checkUserId } from "@/utils/uuid";
 import * as Font from "expo-font";
@@ -52,5 +52,5 @@ export default function Index() {
     return null;
   }
 
-  return <Home />;
+  return <SignIn />;
 }

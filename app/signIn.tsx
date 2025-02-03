@@ -16,7 +16,7 @@ import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
-export default function Home() {
+export default function SignIn() {
   const setUserInfo = useBoundStore((state) => state.setUserInfo);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
@@ -31,6 +31,7 @@ export default function Home() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
+        router.replace("/main");
         await AsyncStorage.setItem("userInfo", JSON.stringify(user));
         setUserInfo({
           uid: user.uid,
