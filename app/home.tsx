@@ -1,5 +1,8 @@
 import Button from "@/components/Button";
-import { LOGIN_BUTTON, START_BUTTON } from "@/constants/Buttons";
+import DividerLine from "@/components/DividerLine";
+import GoogleSignInButton from "@/components/GoogleSignInButton";
+import { START_NON_USER_BUTTON } from "@/constants/Buttons";
+import { APP_DESC, APP_TITLE } from "@/constants/Messages";
 import { auth } from "@/firebaseConfig";
 import { useBoundStore } from "@/store/useBoundStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,7 +12,7 @@ import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential } from "firebase/auth";
 import { useEffect } from "react";
-import { Image, SafeAreaView, StyleSheet, View } from "react-native";
+import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -51,8 +54,8 @@ export default function Home() {
     promptAsync();
   }
 
-  function handleMoveToAR() {
-    router.push("/setUserLocation");
+  function handleStartNonUser() {
+    router.push("/main");
   }
 
   return (
@@ -60,22 +63,22 @@ export default function Home() {
       <View style={styles.imageContainer}>
         <Image
           source={require("../assets/images/logo-vertical.png")}
+          width={200}
+          height={200}
           style={styles.image}
           resizeMode="contain"
         />
+        <Text style={styles.titleText}>{APP_TITLE}</Text>
+        <Text style={styles.descText}>{APP_DESC}</Text>
       </View>
       <View style={styles.buttonContainer}>
+        <GoogleSignInButton onPressFunc={handleGoogleSignIn} />
+        <DividerLine />
         <Button
-          buttonText={LOGIN_BUTTON}
-          style={styles.login}
-          textStyle={styles.loginText}
-          onPressFunc={handleGoogleSignIn}
-        />
-        <Button
-          buttonText={START_BUTTON}
-          style={styles.start}
-          textStyle={styles.startText}
-          onPressFunc={handleMoveToAR}
+          buttonText={START_NON_USER_BUTTON}
+          style={styles.startNonUserButton}
+          textStyle={styles.signInText}
+          onPressFunc={handleStartNonUser}
         />
       </View>
     </SafeAreaView>
@@ -88,53 +91,56 @@ const styles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: "#F9F4D9",
+    backgroundColor: "#FFFFFF",
+    gap: 70,
   },
   imageContainer: {
-    flex: 7,
+    flex: 4,
+    justifyContent: "flex-end",
   },
   image: {
-    flex: 1,
-    transform: [{ scale: 1 }],
+    transform: [{ scale: 0.8 }],
     alignItems: "center",
     justifyContent: "flex-end",
   },
+  titleText: {
+    fontFamily: "SUITE-Bold",
+    fontSize: 25,
+    color: "#343A40",
+    textAlign: "center",
+    marginBottom: 5,
+  },
+  descText: {
+    fontFamily: "SUITE-SemiBold",
+    fontSize: 18,
+    color: "#343A40",
+    textAlign: "center",
+    lineHeight: 25,
+  },
   buttonContainer: {
-    flex: 2,
+    flex: 3,
     width: "100%",
     flexDirection: "column",
     justifyContent: "flex-start",
     alignItems: "center",
     gap: 15,
   },
-  login: {
-    width: "85%",
-    height: 55,
-    backgroundColor: "#FFFFFF",
-    borderColor: "#5E8BCE",
-    borderWidth: 1.3,
-    borderRadius: 50,
-  },
-  loginText: {
-    color: "#5E8BCE",
-    fontSize: 25,
-    fontFamily: "SUITE-Bold",
-    textAlign: "center",
-    margin: "auto",
-  },
-  start: {
-    width: "85%",
-    height: 55,
+  startNonUserButton: {
+    width: 300,
     backgroundColor: "#5E8BCE",
     borderColor: "#5E8BCE",
-    borderWidth: 1.3,
-    borderRadius: 50,
+    borderWidth: 1,
+    borderRadius: 20,
+    paddingHorizontal: "auto",
+    paddingVertical: 12,
   },
-  startText: {
+  signInText: {
     color: "#FFFFFF",
-    fontSize: 25,
-    fontFamily: "SUITE-Bold",
+    fontSize: 18,
+    lineHeight: 20,
+    fontFamily: "Roboto-medium",
+    fontWeight: 500,
     textAlign: "center",
-    margin: "auto",
+    marginVertical: "auto",
   },
 });
