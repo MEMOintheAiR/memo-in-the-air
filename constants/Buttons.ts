@@ -1,5 +1,5 @@
-export const LOGIN_BUTTON = "로그인";
-export const START_BUTTON = "시작하기";
+export const CREATE_BUTTON = "메모 등록하기";
+export const LIST_BUTTON = "메모 목록보기";
 export const SUBMIT_BUTTON = "등록하기";
 export const DONE_BUTTON = "완료";
 export const CLOSE_BUTTON = "닫기";
