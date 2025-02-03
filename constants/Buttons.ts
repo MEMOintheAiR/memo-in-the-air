@@ -1,3 +1,5 @@
+export const START_NON_USER_BUTTON = "비회원으로 계속하기";
+export const SIGNIN_GOOGLE_BUTTON = "Google로 시작하기";
 export const CREATE_BUTTON = "메모 등록하기";
 export const LIST_BUTTON = "메모 목록보기";
 export const SUBMIT_BUTTON = "등록하기";
