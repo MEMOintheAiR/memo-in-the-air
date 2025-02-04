@@ -1,4 +1,4 @@
-import PreviousIcon from "@/assets/images/previous.svg";
+import Header from "@/components/Header";
 import { SET_CURRENT_LOCATION_BUTTON, SET_UPDATED_LOCATION_BUTTON } from "@/constants/Buttons";
 import { SET_LOCATION_PAGE } from "@/constants/Pages";
 import { COORDS_DELTA, DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from "@/constants/Variable";
@@ -45,10 +45,6 @@ export default function SetUserLocation() {
     );
   }, []);
 
-  function handleMoveToBack(): void {
-    router.back();
-  }
-
   function setUpUserLocation(): void {
     setUserLocation({
       latitude: fixToSixDemicalPoints(tempUserLocation.latitude),
@@ -61,13 +57,11 @@ export default function SetUserLocation() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
-          <PreviousIcon width="20" height="20" color="#343A40" />
-        </Pressable>
-        <Text style={styles.headerText}>{SET_LOCATION_PAGE}</Text>
-        <View style={styles.headerButton} />
-      </View>
+      <Header
+        headerStyle={styles.headerContainer}
+        headerTitle={SET_LOCATION_PAGE}
+        showPreviousButton={false}
+      />
       <MapView
         style={styles.mapContainer}
         initialRegion={{
@@ -115,19 +109,6 @@ const styles = StyleSheet.create({
     flex: 0.8,
     flexDirection: "row",
     alignItems: "flex-end",
-  },
-  headerButton: {
-    flex: 1,
-    alignItems: "center",
-    margin: "auto",
-  },
-  headerText: {
-    flex: 5,
-    fontSize: 24,
-    fontFamily: "SUITE-Medium",
-    color: "#343A40",
-    textAlign: "center",
-    margin: "auto",
   },
   mapContainer: {
     flex: 10,

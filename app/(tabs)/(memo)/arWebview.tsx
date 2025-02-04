@@ -1,6 +1,7 @@
 import HomeSvg from "@/assets/images/home.svg";
 import MapMarkerSvg from "@/assets/images/mapMarker.svg";
 import PlusSvg from "@/assets/images/plus.svg";
+import Header from "@/components/Header";
 import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { COMPASS_UPDATE_RATE } from "@/constants/Variable";
 import { getMemoList } from "@/firebase/memo";
@@ -9,7 +10,7 @@ import { fixToSixDemicalPoints } from "@/utils/number";
 import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import CompassHeading from "react-native-compass-heading";
 import Geolocation from "react-native-geolocation-service";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
@@ -244,8 +245,18 @@ export default function ARWebView() {
     }
   }
 
+  function handleMoveToBack() {
+    router.back();
+  }
+
   return (
-    <>
+    <SafeAreaView style={styles.container}>
+      <Header
+        headerStyle={styles.headerContainer}
+        headerTitle={"메모 보기"}
+        showPreviousButton={true}
+        onPressFunc={handleMoveToBack}
+      />
       <WebView
         ref={webViewRef}
         source={{ uri: "https://memointheair-ar.netlify.app/" }}
@@ -277,13 +288,21 @@ export default function ARWebView() {
           <Text style={styles.listText}>{MEMO_LIST_PAGE}</Text>
         </Pressable>
       </View>
-    </>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  arContainer: {
+  container: {
     flex: 1,
+  },
+  headerContainer: {
+    flex: 0.075,
+    flexDirection: "row",
+    alignItems: "flex-end",
+  },
+  arContainer: {
+    flex: 15,
   },
   bottomContainer: {
     flex: 0.15,
