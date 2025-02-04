@@ -13,10 +13,12 @@ import * as WebBrowser from "expo-web-browser";
 import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential } from "firebase/auth";
 import { useEffect } from "react";
 import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import Geolocation from "react-native-geolocation-service";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignIn() {
+  const setUserLocation = useBoundStore((state) => state.setUserLocation);
   const setUserInfo = useBoundStore((state) => state.setUserInfo);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
@@ -31,7 +33,7 @@ export default function SignIn() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        router.replace("/main");
+        router.replace("/(tabs)");
         await AsyncStorage.setItem("userInfo", JSON.stringify(user));
         setUserInfo({
           uid: user.uid,
@@ -43,6 +45,19 @@ export default function SignIn() {
     });
 
     return () => unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    Geolocation.getCurrentPosition(
+      (position) => {
+        const { latitude, longitude, altitude } = position.coords;
+        setUserLocation({ latitude, longitude, altitude: altitude || 0 });
+      },
+      (error) => {
+        console.error(error);
+      },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+    );
   }, []);
 
   async function handleGoogleSiginResponse(response: AuthSessionResult) {
