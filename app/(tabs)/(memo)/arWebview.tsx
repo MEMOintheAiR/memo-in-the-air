@@ -1,8 +1,5 @@
-import HomeSvg from "@/assets/images/home.svg";
-import MapMarkerSvg from "@/assets/images/mapMarker.svg";
 import PlusSvg from "@/assets/images/plus.svg";
 import Header from "@/components/Header";
-import { MAIN_PAGE, MEMO_LIST_PAGE } from "@/constants/Pages";
 import { COMPASS_UPDATE_RATE } from "@/constants/Variable";
 import { getMemoList } from "@/firebase/memo";
 import { useBoundStore } from "@/store/useBoundStore";
@@ -10,7 +7,7 @@ import { fixToSixDemicalPoints } from "@/utils/number";
 import { setXPosition, setYPosition, setZPosition } from "@/utils/position";
 import { router } from "expo-router";
 import { useEffect, useRef, useState } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { Pressable, SafeAreaView, StyleSheet } from "react-native";
 import CompassHeading from "react-native-compass-heading";
 import Geolocation from "react-native-geolocation-service";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
@@ -67,7 +64,6 @@ export default function ARWebView() {
   function getDifferenceCoords() {
     Geolocation.getCurrentPosition(
       (position) => {
-        console.log(position);
         setDifferenceCoords({
           latitude: position.coords.latitude - userLocation.latitude,
           longitude: position.coords.longitude - userLocation.longitude,
@@ -153,15 +149,6 @@ export default function ARWebView() {
     if (type === "grid-click") {
       router.push("/memoEdit");
     }
-  }
-
-  function handleMoveToHome(): void {
-    router.dismissAll();
-    router.push("/home");
-  }
-
-  function handleMoveToMemoList(): void {
-    router.push("/memoMap");
   }
 
   function putMemoList(): string | undefined {
@@ -268,26 +255,11 @@ export default function ARWebView() {
         mediaCapturePermissionGrantType={"grantIfSameHostElsePrompt"}
         style={styles.arContainer}
       />
-
-      <View style={styles.bottomContainer}>
-        <Pressable style={styles.iconContainer} onPress={handleMoveToHome}>
-          <HomeSvg width="38%" height="38%" color="#343A40" />
-          <Text style={styles.homeText}>{MAIN_PAGE}</Text>
+      {!isGridVisible && (
+        <Pressable style={styles.plusIconContainer} onPress={handleClickPlusButton}>
+          <PlusSvg width="100%" height="100%" color="#5E8BCE" />
         </Pressable>
-
-        {isGridVisible ? (
-          <View style={styles.plusIconContainer}></View>
-        ) : (
-          <Pressable style={styles.plusIconContainer} onPress={handleClickPlusButton}>
-            <PlusSvg width="70%" height="70%" color="#5E8BCE" />
-          </Pressable>
-        )}
-
-        <Pressable style={styles.iconContainer} onPress={handleMoveToMemoList}>
-          <MapMarkerSvg width="34%" height="34%" color="#343A40" />
-          <Text style={styles.listText}>{MEMO_LIST_PAGE}</Text>
-        </Pressable>
-      </View>
+      )}
     </SafeAreaView>
   );
 }
@@ -304,30 +276,14 @@ const styles = StyleSheet.create({
   arContainer: {
     flex: 15,
   },
-  bottomContainer: {
-    flex: 0.15,
-    flexDirection: "row",
-  },
-  iconContainer: {
-    flex: 1,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  homeText: {
-    fontFamily: "SUITE-Regular",
-    fontSize: 15,
-    marginTop: 8,
-    color: "#343A40",
-  },
-  listText: {
-    fontFamily: "SUITE-Regular",
-    fontSize: 15,
-    marginTop: 10,
-    color: "#343A40",
-  },
   plusIconContainer: {
-    flex: 1,
+    width: 60,
+    height: 60,
+    justifyContent: "center",
     alignItems: "center",
-    marginTop: 3,
+    position: "absolute",
+    bottom: 20,
+    right: 20,
+    backgroundColor: "transparent",
   },
 });
