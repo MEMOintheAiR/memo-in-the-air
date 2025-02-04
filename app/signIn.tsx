@@ -56,7 +56,7 @@ export default function SignIn() {
   }
 
   function handleStartNonUser() {
-    router.push("/main");
+    router.push("/(tabs)");
   }
 
   return (

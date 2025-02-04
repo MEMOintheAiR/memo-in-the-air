@@ -11,7 +11,7 @@ import { FlatList, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from
 import MapView from "react-native-map-clustering";
 import { Marker } from "react-native-maps";
 
-export default function MemoMap() {
+export default function MemoList() {
   const userLocation = useBoundStore((state) => state.userLocation);
   const memoList = useBoundStore((state) => state.memoList);
 
