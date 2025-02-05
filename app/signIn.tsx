@@ -12,15 +12,17 @@ import * as Google from "expo-auth-session/providers/google";
 import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
 import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential } from "firebase/auth";
-import { useEffect } from "react";
-import { Image, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useEffect, useState } from "react";
+import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import Geolocation from "react-native-geolocation-service";
 
 WebBrowser.maybeCompleteAuthSession();
 
 export default function SignIn() {
+  const userId = useBoundStore((state) => state.userId);
   const setUserLocation = useBoundStore((state) => state.setUserLocation);
   const setUserInfo = useBoundStore((state) => state.setUserInfo);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [request, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
   });
@@ -76,6 +78,7 @@ export default function SignIn() {
 
   function handleGoogleSignIn() {
     promptAsync();
+    setIsLoading(true);
   }
 
   function handleStartNonUser() {
@@ -83,7 +86,7 @@ export default function SignIn() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       <View style={styles.imageContainer}>
         <Image
           source={require("../assets/images/logo-vertical.png")}
@@ -105,7 +108,12 @@ export default function SignIn() {
           onPressFunc={handleStartNonUser}
         />
       </View>
-    </SafeAreaView>
+      {isLoading && (
+        <View style={styles.loadingContainer}>
+          <ActivityIndicator size="large" color="#000080r" style={styles.indicatorPosition} />
+        </View>
+      )}
+    </View>
   );
 }
 
@@ -166,5 +174,16 @@ const styles = StyleSheet.create({
     fontWeight: 500,
     textAlign: "center",
     marginVertical: "auto",
+  },
+  loadingContainer: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+    backgroundColor: "#ECE9EA",
+    opacity: 0.5,
+  },
+  indicatorPosition: {
+    top: "55%",
+    left: 0,
   },
 });
