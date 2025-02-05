@@ -7,7 +7,7 @@ export default function MemoRouter() {
   const isUserSetLocation = useBoundStore((state) => state.isUserSetLocation);
 
   useEffect(() => {
-    if (pathName === "/memoCreate") {
+    if (pathName === "/memoRouter") {
       if (isUserSetLocation) {
         router.push("/arWebview");
       } else {
