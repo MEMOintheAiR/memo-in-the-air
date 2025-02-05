@@ -3,6 +3,7 @@ import DividerLine from "@/components/DividerLine";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { START_NON_USER_BUTTON } from "@/constants/Buttons";
 import { APP_DESC, APP_TITLE } from "@/constants/Messages";
+import { upsertUserInfo } from "@/firebase/user";
 import { auth } from "@/firebaseConfig";
 import { useBoundStore } from "@/store/useBoundStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -35,6 +36,13 @@ export default function SignIn() {
       if (user) {
         router.replace("/memoList");
         await AsyncStorage.setItem("userInfo", JSON.stringify(user));
+        await upsertUserInfo({
+          userId: userId,
+          uid: user.uid,
+          email: user.email,
+          displayName: user.displayName,
+          photoURL: user.photoURL,
+        });
         setUserInfo({
           uid: user.uid,
           email: user.email,
