@@ -1,5 +1,6 @@
-import PreviousIcon from "@/assets/images/previous.svg";
 import AlertModal from "@/components/AlertModal";
+import Header from "@/components/Header";
+import ShadowButton from "@/components/ShadowButton";
 import { CLOSE_BUTTON, MOVE_TO_AR_BUTTON, SUBMIT_BUTTON } from "@/constants/Buttons";
 import { CREATE_MEMO_TEXT, INPUT_TEXT } from "@/constants/Messages";
 import { CREATE_MEMO_PAGE } from "@/constants/Pages";
@@ -11,10 +12,8 @@ import { useState } from "react";
 import {
   Keyboard,
   KeyboardAvoidingView,
-  Pressable,
   SafeAreaView,
   StyleSheet,
-  Text,
   TextInput,
   TouchableWithoutFeedback,
   View,
@@ -77,13 +76,12 @@ export default function MemoEdit() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
-          <PreviousIcon width="20" height="20" color="#343A40" />
-        </Pressable>
-        <Text style={styles.headerTitle}>{CREATE_MEMO_PAGE}</Text>
-        <View style={styles.headerButton} />
-      </View>
+      <Header
+        headerStyle={styles.headerContainer}
+        headerTitle={CREATE_MEMO_PAGE}
+        showPreviousButton={true}
+        onPressFunc={handleMoveToBack}
+      />
 
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <KeyboardAvoidingView
@@ -107,9 +105,12 @@ export default function MemoEdit() {
       </TouchableWithoutFeedback>
 
       <View style={styles.bottomContainer}>
-        <Pressable style={styles.buttonContainer} onPress={handleClickHeaderButton}>
-          <Text style={styles.buttonText}>{SUBMIT_BUTTON}</Text>
-        </Pressable>
+        <ShadowButton
+          buttonStyle={styles.buttonContainer}
+          textStyle={styles.buttonText}
+          buttonText={SUBMIT_BUTTON}
+          onPressFunc={handleClickHeaderButton}
+        />
       </View>
 
       <AlertModal
@@ -146,14 +147,14 @@ const styles = StyleSheet.create({
     margin: "auto",
   },
   headerButtonText: {
-    fontSize: 24,
+    fontSize: 18,
     fontWeight: 400,
     color: "#5E8BCE",
     margin: "auto",
   },
   editViewContainer: {
     flex: 10,
-    backgroundColor: "#f5f6f8",
+    backgroundColor: "#F5F6F8",
   },
   memo: {
     width: 300,
@@ -171,17 +172,17 @@ const styles = StyleSheet.create({
   },
   bottomContainer: {
     flex: 1,
+    backgroundColor: "#F5F6F8",
   },
   buttonContainer: {
-    width: "100%",
-    height: "100%",
+    width: "85%",
+    height: "80%",
+    borderRadius: 10,
+    marginHorizontal: "auto",
     backgroundColor: "#5E8BCE",
-    textAlign: "center",
-    justifyContent: "center",
-    alignItems: "center",
   },
   buttonText: {
-    fontSize: 27,
+    fontSize: 22,
     fontFamily: "SUITE-Bold",
     color: "#FFFFFF",
   },
