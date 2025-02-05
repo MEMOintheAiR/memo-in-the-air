@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import ShadowButton from "@/components/ShadowButton";
 import { SET_CURRENT_LOCATION_BUTTON, SET_UPDATED_LOCATION_BUTTON } from "@/constants/Buttons";
 import { SET_LOCATION_PAGE } from "@/constants/Pages";
 import { COORDS_DELTA, DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from "@/constants/Variable";
@@ -6,7 +7,7 @@ import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
-import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import Geolocation from "react-native-geolocation-service";
 import MapView, { Marker } from "react-native-maps";
 
@@ -92,11 +93,12 @@ export default function SetUserLocation() {
           }}
         />
       </MapView>
-      <View style={styles.bottomContainer}>
-        <Pressable style={styles.buttonContainer} onPress={setUpUserLocation}>
-          <Text style={styles.buttonText}>{buttonText}</Text>
-        </Pressable>
-      </View>
+      <ShadowButton
+        buttonStyle={styles.buttonContainer}
+        textStyle={styles.buttonText}
+        buttonText={buttonText}
+        onPressFunc={setUpUserLocation}
+      />
     </SafeAreaView>
   );
 }
@@ -113,21 +115,18 @@ const styles = StyleSheet.create({
   mapContainer: {
     flex: 10,
   },
-  bottomContainer: {
-    flex: 1,
-  },
   buttonContainer: {
-    width: "100%",
-    height: "100%",
+    width: "70%",
+    height: 50,
+    position: "absolute",
+    bottom: 25,
+    left: "15%",
+    borderRadius: 25,
     backgroundColor: "#5E8BCE",
-    textAlign: "center",
-    justifyContent: "center",
-    alignItems: "center",
   },
   buttonText: {
-    fontSize: 27,
+    fontSize: 22,
     fontFamily: "SUITE-Bold",
     color: "#FFFFFF",
-    margin: "auto",
   },
 });
