@@ -19,6 +19,7 @@ type locationProps = {
 
 export default function SetUserLocation() {
   const setUserLocation = useBoundStore((state) => state.setUserLocation);
+  const setIsUserSetLocation = useBoundStore((state) => state.setIsUserSetLocation);
 
   const [buttonText, setButtonText] = useState<string>(SET_CURRENT_LOCATION_BUTTON);
   const [currentLocation, setCurrentLocation] = useState<locationProps>({
@@ -52,6 +53,7 @@ export default function SetUserLocation() {
       longitude: fixToSixDemicalPoints(tempUserLocation.longitude),
       altitude: fixToSixDemicalPoints(tempUserLocation.altitude),
     });
+    setIsUserSetLocation(true);
 
     router.push("/arWebview");
   }
