@@ -1,11 +1,10 @@
 import CloseIcon from "@/assets/images/close.svg";
-import PreviousIcon from "@/assets/images/previous.svg";
+import Header from "@/components/Header";
 import { MEMO_LIST_PAGE } from "@/constants/Pages";
 import { COORDS_DELTA } from "@/constants/Variable";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints, formatDate } from "@/utils/number";
 import * as Location from "expo-location";
-import { router } from "expo-router";
 import { useState } from "react";
 import { FlatList, Modal, Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 import MapView from "react-native-map-clustering";
@@ -19,10 +18,6 @@ export default function MemoList() {
   const [clusterMemoList, setClusterMemoList] = useState<memoType[] | []>([]);
   const [clusterAddress, setClusterAddress] = useState<string>("");
 
-  function handleMoveToBack(): void {
-    router.back();
-  }
-
   async function getClusterAddress(coords: { latitude: number; longitude: number }): Promise<void> {
     const address = await Location.reverseGeocodeAsync(coords);
     setClusterAddress(address[0].region + " " + address[0].district);
@@ -30,13 +25,11 @@ export default function MemoList() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={styles.headerContainer}>
-        <Pressable style={styles.headerButton} onPress={handleMoveToBack}>
-          <PreviousIcon width="20" height="20" color="#343A40" />
-        </Pressable>
-        <Text style={styles.headerText}>{MEMO_LIST_PAGE}</Text>
-        <View style={styles.headerButton} />
-      </View>
+      <Header
+        headerStyle={styles.headerContainer}
+        headerTitle={MEMO_LIST_PAGE}
+        showPreviousButton={false}
+      />
 
       <MapView
         initialRegion={{
