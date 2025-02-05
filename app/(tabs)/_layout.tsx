@@ -4,9 +4,12 @@ import { Tabs } from "expo-router";
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "#5E8BCE", headerShown: false }}>
+    <Tabs
+      initialRouteName="memoList"
+      screenOptions={{ tabBarActiveTintColor: "#5E8BCE", headerShown: false }}
+    >
       <Tabs.Screen
-        name="index"
+        name="memoList"
         options={{
           title: "메모 목록",
           tabBarIcon: ({ focused }) => (
@@ -15,18 +18,12 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="memoRouter"
+        name="memoCreate"
         options={{
           title: "메모 등록",
           tabBarIcon: ({ focused }) => (
             <Memo width={30} height={30} color={focused ? "#5E8BCE" : "#808b96"} />
           ),
-        }}
-      />
-      <Tabs.Screen
-        name="(memo)"
-        options={{
-          href: null,
         }}
       />
     </Tabs>

@@ -33,7 +33,7 @@ export default function SignIn() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        router.replace("/(tabs)");
+        router.replace("/memoList");
         await AsyncStorage.setItem("userInfo", JSON.stringify(user));
         setUserInfo({
           uid: user.uid,
@@ -71,7 +71,7 @@ export default function SignIn() {
   }
 
   function handleStartNonUser() {
-    router.push("/(tabs)");
+    router.push("/memoList");
   }
 
   return (

@@ -5,7 +5,6 @@ import { SET_LOCATION_PAGE } from "@/constants/Pages";
 import { COORDS_DELTA, DEFAULT_LATITUDE, DEFAULT_LONGITUDE } from "@/constants/Variable";
 import { useBoundStore } from "@/store/useBoundStore";
 import { fixToSixDemicalPoints } from "@/utils/number";
-import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import { SafeAreaView, StyleSheet } from "react-native";
 import Geolocation from "react-native-geolocation-service";
@@ -54,8 +53,6 @@ export default function SetUserLocation() {
       altitude: fixToSixDemicalPoints(tempUserLocation.altitude),
     });
     setIsUserSetLocation(true);
-
-    router.push("/arWebview");
   }
 
   return (
