@@ -15,7 +15,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="memoCreate"
+        name="memoRouter"
         options={{
           title: "메모 등록",
           tabBarIcon: ({ focused }) => (
