@@ -240,7 +240,7 @@ export default function ARWebView() {
     <SafeAreaView style={styles.container}>
       <Header
         headerStyle={styles.headerContainer}
-        headerTitle={"메모 보기"}
+        headerTitle={""}
         showPreviousButton={true}
         onPressFunc={handleMoveToBack}
       />
