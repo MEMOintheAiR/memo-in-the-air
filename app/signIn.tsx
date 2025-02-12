@@ -7,6 +7,7 @@ import { upsertUserInfo } from "@/firebase/user";
 import { auth } from "@/firebaseConfig";
 import { useBoundStore } from "@/store/useBoundStore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as AppleAuthentication from "expo-apple-authentication";
 import { AuthSessionResult } from "expo-auth-session/build/AuthSession.types";
 import * as Google from "expo-auth-session/providers/google";
 import { router } from "expo-router";
@@ -81,6 +82,40 @@ export default function SignIn() {
     setIsLoading(true);
   }
 
+  async function handleAppleSignIn() {
+    try {
+      const credential = await AppleAuthentication.signInAsync({
+        requestedScopes: [
+          AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
+          AppleAuthentication.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+
+      if (credential.authorizationCode !== null) {
+        await upsertUserInfo({
+          userId: userId,
+          uid: credential.user,
+          email: credential.email,
+          displayName: `${credential.fullName?.givenName + " " + credential.fullName?.familyName}`,
+          photoURL: "",
+        });
+        setUserInfo({
+          uid: credential.user,
+          email: credential.email,
+          displayName: `${credential.fullName?.givenName + " " + credential.fullName?.familyName}`,
+          photoURL: "",
+        });
+        router.replace("/memoList");
+      } else {
+        throw new Error("로그인 인증 실패");
+      }
+    } catch (e) {
+      if (e.code !== "ERR_REQUEST_CANCELED") {
+        console.error(e.code);
+      }
+    }
+  }
+
   function handleStartNonUser() {
     router.push("/memoList");
   }
@@ -100,6 +135,13 @@ export default function SignIn() {
       </View>
       <View style={styles.buttonContainer}>
         <GoogleSignInButton onPressFunc={handleGoogleSignIn} />
+        <AppleAuthentication.AppleAuthenticationButton
+          buttonType={AppleAuthentication.AppleAuthenticationButtonType.SIGN_IN}
+          buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+          cornerRadius={20}
+          style={styles.appleSignInButton}
+          onPress={handleAppleSignIn}
+        />
         <DividerLine />
         <Button
           buttonText={START_NON_USER_BUTTON}
@@ -156,6 +198,10 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
     alignItems: "center",
     gap: 15,
+  },
+  appleSignInButton: {
+    width: 300,
+    height: 50,
   },
   startNonUserButton: {
     width: 300,
