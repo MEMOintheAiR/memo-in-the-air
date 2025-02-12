@@ -16,7 +16,8 @@
         "NSCameraUsageDescription": "Allow MEMO in the AiR to use your camera",
         "NSMicrophoneUsageDescription": "Allow MEMO in the AiR to use your microphone"
       },
-      "bundleIdentifier": "com.anonymous.MEMOintheAiR"
+      "bundleIdentifier": "com.onlypine",
+      "usesAppleSignIn": true
     },
     "android": {
       "adaptiveIcon": {
@@ -52,7 +53,8 @@
         {
           "motionPermission": "Allow MEMO in the AiR to access your device motion."
         }
-      ]
+      ],
+      "expo-apple-authentication"
     ],
     "experiments": {
       "typedRoutes": true
