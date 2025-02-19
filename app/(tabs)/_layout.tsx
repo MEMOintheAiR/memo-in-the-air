@@ -1,5 +1,6 @@
 import MapMarker from "@/assets/images/mapMarker.svg";
 import Memo from "@/assets/images/memo.svg";
+import User from "@/assets/images/user.svg";
 import { Tabs } from "expo-router";
 
 export default function TabLayout() {
@@ -22,8 +23,23 @@ export default function TabLayout() {
         options={{
           title: "메모 등록",
           tabBarIcon: ({ focused }) => (
-            <Memo width={30} height={30} color={focused ? "#5E8BCE" : "#808b96"} />
+            <Memo width={31} height={31} color={focused ? "#5E8BCE" : "#808b96"} />
           ),
+          tabBarLabelStyle: {
+            paddingTop: 1,
+          },
+        }}
+      />
+      <Tabs.Screen
+        name="myPage"
+        options={{
+          title: "마이페이지",
+          tabBarIcon: ({ focused }) => (
+            <User width={31.5} height={31.5} color={focused ? "#5E8BCE" : "#808b96"} />
+          ),
+          tabBarLabelStyle: {
+            paddingTop: 4,
+          },
         }}
       />
     </Tabs>
