@@ -12,7 +12,7 @@ import CompassHeading from "react-native-compass-heading";
 import Geolocation from "react-native-geolocation-service";
 import { WebView, WebViewMessageEvent } from "react-native-webview";
 
-export default function ARWebView() {
+export default function MemoView() {
   const userId = useBoundStore((state) => state.userId);
   const memoList = useBoundStore((state) => state.memoList);
   const setMemoList = useBoundStore((state) => state.setMemoList);
@@ -147,7 +147,7 @@ export default function ARWebView() {
     getMemoCurrentLocation();
 
     if (type === "grid-click") {
-      router.push("/memoEdit");
+      router.push("/memo/edit");
     }
   }
 

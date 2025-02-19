@@ -105,14 +105,15 @@ export default function SetUserLocation() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: "#FFFFFF",
   },
   headerContainer: {
-    flex: 0.8,
+    flex: 0.6,
     flexDirection: "row",
     alignItems: "flex-end",
   },
   mapContainer: {
-    flex: 10,
+    flex: 8,
   },
   buttonContainer: {
     width: "70%",
