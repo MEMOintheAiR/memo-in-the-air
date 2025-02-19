@@ -12,18 +12,22 @@ type userType = {
 export async function upsertUserInfo(userInfo: userType) {
   const snapshot = await get(ref(database, `user/${userInfo.userId}`));
 
-  if (!snapshot.exists()) {
-    await set(ref(database as Database, `user/${userInfo.userId}`), {
-      userId: userInfo.userId,
-      uid: userInfo.uid,
-      email: userInfo.email,
-      displayName: userInfo.displayName,
-      photoURL: userInfo.photoURL,
-      lastSignInAt: new Date().toISOString(),
-    });
-  } else {
+  if (snapshot.exists()) {
     await update(ref(database, `user/${userInfo.userId}`), {
       lastSignInAt: new Date().toISOString(),
     });
+
+    return { ...snapshot.val() };
   }
+
+  await set(ref(database as Database, `user/${userInfo.userId}`), {
+    userId: userInfo.userId,
+    uid: userInfo.uid,
+    email: userInfo.email,
+    displayName: userInfo.displayName,
+    photoURL: userInfo.photoURL,
+    lastSignInAt: new Date().toISOString(),
+  });
+
+  return userInfo;
 }

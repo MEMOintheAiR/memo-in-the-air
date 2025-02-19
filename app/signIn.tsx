@@ -3,16 +3,15 @@ import DividerLine from "@/components/DividerLine";
 import GoogleSignInButton from "@/components/GoogleSignInButton";
 import { START_NON_USER_BUTTON } from "@/constants/Buttons";
 import { APP_DESC, APP_TITLE } from "@/constants/Messages";
-import { upsertUserInfo } from "@/firebase/user";
 import { auth } from "@/firebaseConfig";
+import { saveAppleUserInfo, saveGoogleUserInfo } from "@/services/auth";
 import { useBoundStore } from "@/store/useBoundStore";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as AppleAuthentication from "expo-apple-authentication";
 import { AuthSessionResult } from "expo-auth-session/build/AuthSession.types";
 import * as Google from "expo-auth-session/providers/google";
 import { router } from "expo-router";
 import * as WebBrowser from "expo-web-browser";
-import { GoogleAuthProvider, onAuthStateChanged, signInWithCredential } from "firebase/auth";
+import { GoogleAuthProvider, User, onAuthStateChanged, signInWithCredential } from "firebase/auth";
 import { useEffect, useState } from "react";
 import { ActivityIndicator, Image, StyleSheet, Text, View } from "react-native";
 import Geolocation from "react-native-geolocation-service";
@@ -24,7 +23,7 @@ export default function SignIn() {
   const setUserLocation = useBoundStore((state) => state.setUserLocation);
   const setUserInfo = useBoundStore((state) => state.setUserInfo);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [request, response, promptAsync] = Google.useAuthRequest({
+  const [, response, promptAsync] = Google.useAuthRequest({
     iosClientId: process.env.EXPO_PUBLIC_FIREBASE_IOS_CLIENT_ID,
   });
 
@@ -35,23 +34,10 @@ export default function SignIn() {
   }, [response]);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user: User | null) => {
       if (user) {
+        await saveGoogleUserInfo(userId, user, setUserInfo);
         router.replace("/memoList");
-        await AsyncStorage.setItem("userInfo", JSON.stringify(user));
-        await upsertUserInfo({
-          userId: userId,
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-        });
-        setUserInfo({
-          uid: user.uid,
-          email: user.email,
-          displayName: user.displayName,
-          photoURL: user.photoURL,
-        });
       }
     });
 
@@ -92,19 +78,7 @@ export default function SignIn() {
       });
 
       if (credential.authorizationCode !== null) {
-        await upsertUserInfo({
-          userId: userId,
-          uid: credential.user,
-          email: credential.email,
-          displayName: `${credential.fullName?.givenName + " " + credential.fullName?.familyName}`,
-          photoURL: "",
-        });
-        setUserInfo({
-          uid: credential.user,
-          email: credential.email,
-          displayName: `${credential.fullName?.givenName + " " + credential.fullName?.familyName}`,
-          photoURL: "",
-        });
+        await saveAppleUserInfo(userId, credential, setUserInfo);
         router.replace("/memoList");
       } else {
         throw new Error("로그인 인증 실패");
@@ -205,10 +179,11 @@ const styles = StyleSheet.create({
   },
   startNonUserButton: {
     width: 300,
+    height: 48,
     backgroundColor: "#5E8BCE",
     borderColor: "#5E8BCE",
     borderWidth: 1,
-    borderRadius: 20,
+    borderRadius: 25,
     paddingHorizontal: "auto",
     paddingVertical: 12,
   },
