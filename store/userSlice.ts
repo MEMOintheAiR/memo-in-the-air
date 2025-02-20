@@ -1,10 +1,10 @@
 import { StateCreator } from "zustand";
 
 type userInfoType = {
-  uid: string;
+  userId: string;
+  authId: string;
   email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  nickName: string | null;
 };
 
 type locationType = {
@@ -36,10 +36,10 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
     }
   },
   userInfo: {
-    uid: "",
+    userId: "",
+    authId: "",
     email: null,
-    displayName: null,
-    photoURL: null,
+    nickName: null,
   },
   setUserInfo: (userInfo: userInfoType) => {
     set((state: UserSlice) => ({ ...state.userInfo, userInfo }));

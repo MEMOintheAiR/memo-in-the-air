@@ -5,10 +5,9 @@ import { User } from "firebase/auth";
 
 type userType = {
   userId: string;
-  uid: string;
+  authId: string;
   email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  nickName: string | null;
 };
 
 export async function saveAppleUserInfo(
@@ -18,10 +17,9 @@ export async function saveAppleUserInfo(
 ) {
   const user = await upsertUserInfo({
     userId: userId,
-    uid: userInfo.user,
+    authId: userInfo.user,
     email: userInfo.email,
-    displayName: `${userInfo.fullName?.givenName + " " + userInfo.fullName?.familyName}`,
-    photoURL: "",
+    nickName: `${userInfo.fullName?.givenName + " " + userInfo.fullName?.familyName}`,
   });
 
   await AsyncStorage.setItem("userInfo", JSON.stringify(user));
@@ -35,10 +33,9 @@ export async function saveGoogleUserInfo(
 ) {
   const user = await upsertUserInfo({
     userId: userId,
-    uid: userInfo.uid,
+    authId: userInfo.uid,
     email: userInfo.email,
-    displayName: userInfo.displayName,
-    photoURL: userInfo.photoURL,
+    nickName: userInfo.displayName,
   });
 
   await AsyncStorage.setItem("userInfo", JSON.stringify(user));

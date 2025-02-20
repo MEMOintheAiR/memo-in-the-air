@@ -3,10 +3,9 @@ import { Database, get, ref, set, update } from "firebase/database";
 
 type userType = {
   userId: string;
-  uid: string;
+  authId: string;
   email: string | null;
-  displayName: string | null;
-  photoURL: string | null;
+  nickName: string | null;
 };
 
 export async function upsertUserInfo(userInfo: userType) {
@@ -22,10 +21,9 @@ export async function upsertUserInfo(userInfo: userType) {
 
   await set(ref(database as Database, `user/${userInfo.userId}`), {
     userId: userInfo.userId,
-    uid: userInfo.uid,
+    authId: userInfo.authId,
     email: userInfo.email,
-    displayName: userInfo.displayName,
-    photoURL: userInfo.photoURL,
+    nickName: userInfo.nickName,
     lastSignInAt: new Date().toISOString(),
   });
 
