@@ -6,6 +6,7 @@ type userType = {
   authId: string;
   email: string | null;
   nickName: string | null;
+  loginType: string | null;
 };
 
 export async function upsertUserInfo(userInfo: userType) {
@@ -24,6 +25,7 @@ export async function upsertUserInfo(userInfo: userType) {
     authId: userInfo.authId,
     email: userInfo.email,
     nickName: userInfo.nickName,
+    loginType: userInfo.loginType,
     lastSignInAt: new Date().toISOString(),
   });
 

@@ -5,6 +5,7 @@ type userInfoType = {
   authId: string;
   email: string | null;
   nickName: string | null;
+  loginType: string | null;
 };
 
 type locationType = {
@@ -40,6 +41,7 @@ export const createUserSlice: StateCreator<UserSlice> = (set) => ({
     authId: "",
     email: null,
     nickName: null,
+    loginType: null,
   },
   setUserInfo: (userInfo: userInfoType) => {
     set((state: UserSlice) => ({ ...state.userInfo, userInfo }));

@@ -8,6 +8,7 @@ type userType = {
   authId: string;
   email: string | null;
   nickName: string | null;
+  loginType: string | null;
 };
 
 export async function saveAppleUserInfo(
@@ -20,6 +21,7 @@ export async function saveAppleUserInfo(
     authId: userInfo.user,
     email: userInfo.email,
     nickName: `${userInfo.fullName?.givenName + " " + userInfo.fullName?.familyName}`,
+    loginType: "apple",
   });
 
   await AsyncStorage.setItem("userInfo", JSON.stringify(user));
@@ -36,6 +38,7 @@ export async function saveGoogleUserInfo(
     authId: userInfo.uid,
     email: userInfo.email,
     nickName: userInfo.displayName,
+    loginType: "apple",
   });
 
   await AsyncStorage.setItem("userInfo", JSON.stringify(user));
