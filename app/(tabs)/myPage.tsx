@@ -1,10 +1,25 @@
 import User from "@/assets/images/user.svg";
 import Header from "@/components/Header";
+import { clearUserInfo } from "@/services/auth";
 import { useBoundStore } from "@/store/useBoundStore";
-import { SafeAreaView, StyleSheet, Text, View } from "react-native";
+import { useRouter } from "expo-router";
+import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function MyPage() {
+  const router = useRouter();
   const userInfo = useBoundStore((state) => state.userInfo);
+  const setUserInfo = useBoundStore((state) => state.setUserInfo);
+
+  async function handleSignOut() {
+    try {
+      if (userInfo.loginType === "apple") {
+        clearUserInfo(setUserInfo);
+        router.replace("/");
+      }
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   return (
     <SafeAreaView style={styles.container}>
@@ -20,7 +35,14 @@ export default function MyPage() {
             <Text style={{ color: "#000000" }}>{userInfo.email}</Text>
           </View>
         </View>
-        <View style={styles.menuContainer}></View>
+        <View style={styles.menuContainer}>
+          <Pressable style={styles.buttonContainer} onPress={handleSignOut}>
+            <Text style={styles.buttonText}>로그아웃</Text>
+          </Pressable>
+          <Pressable style={styles.buttonContainer} onPress={() => console.log("logout")}>
+            <Text style={styles.buttonText}>탈퇴하기</Text>
+          </Pressable>
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -38,9 +60,11 @@ const styles = StyleSheet.create({
   },
   myPageContainer: {
     flex: 8,
+    justifyContent: "center",
+    alignItems: "center",
   },
   profileContainer: {
-    flex: 3,
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -48,6 +72,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuContainer: {
-    flex: 5,
+    flex: 2,
+    flexDirection: "row",
+    width: "80%",
+    alignItems: "center",
+  },
+  buttonContainer: {
+    width: "50%",
+    height: 30,
+    borderColor: "#000000",
+    borderWidth: 1,
+  },
+  buttonText: {
+    textAlign: "center",
+    margin: "auto",
   },
 });

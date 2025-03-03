@@ -44,3 +44,14 @@ export async function saveGoogleUserInfo(
   await AsyncStorage.setItem("userInfo", JSON.stringify(user));
   setUserInfo(user);
 }
+
+export async function clearUserInfo(setUserInfo: (user: userType) => void) {
+  await AsyncStorage.removeItem("userInfo");
+  setUserInfo({
+    userId: "",
+    authId: "",
+    email: "",
+    nickName: null,
+    loginType: null,
+  });
+}
