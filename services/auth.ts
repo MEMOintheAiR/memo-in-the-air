@@ -38,7 +38,7 @@ export async function saveGoogleUserInfo(
     authId: userInfo.uid,
     email: userInfo.email,
     nickName: userInfo.displayName,
-    loginType: "apple",
+    loginType: "google",
   });
 
   await AsyncStorage.setItem("userInfo", JSON.stringify(user));

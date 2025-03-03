@@ -1,8 +1,10 @@
 import User from "@/assets/images/user.svg";
 import Header from "@/components/Header";
+import { auth } from "@/firebaseConfig";
 import { clearUserInfo } from "@/services/auth";
 import { useBoundStore } from "@/store/useBoundStore";
 import { useRouter } from "expo-router";
+import { signOut } from "firebase/auth";
 import { Pressable, SafeAreaView, StyleSheet, Text, View } from "react-native";
 
 export default function MyPage() {
@@ -12,10 +14,11 @@ export default function MyPage() {
 
   async function handleSignOut() {
     try {
-      if (userInfo.loginType === "apple") {
-        clearUserInfo(setUserInfo);
-        router.replace("/");
+      if (userInfo.loginType === "google") {
+        await signOut(auth);
       }
+      clearUserInfo(setUserInfo);
+      router.replace("/");
     } catch (e) {
       console.error(e);
     }
